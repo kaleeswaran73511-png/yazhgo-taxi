@@ -1845,11 +1845,288 @@ input, select, textarea, button {
 }
 
 /* ==========================================================================
+   HERO TRUST BULLETS
+   ========================================================================== */
+.hero-trust-bullets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #E2E8F0;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.hero-trust-bullets span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-trust-bullets svg {
+  color: var(--accent-emerald);
+  width: 15px;
+  height: 15px;
+}
+
+/* ==========================================================================
+   HOW IT WORKS (3 SIMPLE STEPS)
+   ========================================================================== */
+.process-section {
+  background: #FFFFFF;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.step-card {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: var(--radius-md);
+  padding: 30px 24px;
+  position: relative;
+  transition: var(--transition);
+}
+
+.step-card:hover {
+  transform: translateY(-4px);
+  border-color: #0A0E17;
+  background: #FFFFFF;
+  box-shadow: var(--shadow-md);
+}
+
+.step-number {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #B48228;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.step-title {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #0A0E17;
+  margin-bottom: 8px;
+}
+
+.step-desc {
+  font-size: 0.88rem;
+  color: #475569;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   TARIFF COMPARISON TABLE
+   ========================================================================== */
+.tariff-section {
+  background: #FFFFFF;
+  border-top: 1px solid #E2E8F0;
+}
+
+.table-responsive-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 20px;
+}
+
+.tariff-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  min-width: 680px;
+}
+
+.tariff-table th, .tariff-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #E2E8F0;
+  font-size: 0.9rem;
+}
+
+.tariff-table th {
+  background: #0A0E17;
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.tariff-table th.highlight-col {
+  background: #1E293B;
+  color: #F6C445;
+  border-top: 3px solid #B48228;
+}
+
+.tariff-table tr:hover td {
+  background: #F8FAFC;
+}
+
+.tariff-table td.feature-title {
+  font-weight: 700;
+  color: #0A0E17;
+  background: #F8FAFC;
+  width: 25%;
+}
+
+.tariff-table td.rate-highlight {
+  font-weight: 800;
+  color: #B48228;
+  font-size: 1.05rem;
+}
+
+.tariff-table tr:last-child td {
+  border-bottom: none;
+}
+
+.table-terms-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  font-size: 0.84rem;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.table-terms-box strong {
+  color: #0A0E17;
+}
+
+/* ==========================================================================
+   POPULAR ROUTES GRID
+   ========================================================================== */
+.routes-section {
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.routes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.route-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: var(--transition);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02);
+}
+
+.route-card:hover {
+  transform: translateY(-4px);
+  border-color: #0A0E17;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+.route-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.route-badge {
+  background: #FDF8ED;
+  border: 1px solid rgba(180, 130, 40, 0.35);
+  color: #986B1C;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.route-time {
+  font-size: 0.75rem;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.route-time svg {
+  width: 12px;
+  height: 12px;
+}
+
+.route-title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0A0E17;
+  margin-bottom: 10px;
+}
+
+.route-pricing-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+}
+
+.route-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.route-price-row span {
+  color: #64748B;
+}
+
+.route-price-row strong {
+  color: #0A0E17;
+  font-weight: 800;
+}
+
+.route-price-row strong.gold-val {
+  color: #B48228;
+}
+
+.btn-route-book {
+  padding: 9px 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  min-height: 38px;
+}
+
+/* ==========================================================================
    RESPONSIVE MEDIA QUERIES (TABLETS & DESKTOPS)
    ========================================================================== */
 @media (max-width: 1024px) {
   .hero-grid, .driver-cta-grid {
     grid-template-columns: 1fr;
+  }
+
+  .process-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .routes-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .fleet-grid-3, .safety-grid {
@@ -1998,7 +2275,7 @@ input, select, textarea, button {
   }
 
   /* Fleet & Services Cards */
-  .fleet-grid-3, .services-grid, .safety-grid, .reviews-grid, .footer-grid {
+  .fleet-grid-3, .services-grid, .safety-grid, .reviews-grid, .footer-grid, .routes-grid {
     grid-template-columns: 1fr;
     gap: 18px;
   }
