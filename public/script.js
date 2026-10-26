@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initLucide();
   initDefaultDateTime();
   initMobileMenu();
-  updateFormDistance(150);
   calculateFormFare();
   calculateLiveFare();
 });
@@ -249,45 +248,35 @@ function selectCabType(cabType) {
   calculateFormFare();
 }
 
-// Calculate Estimated Fare for Hero Widget
+// Calculate Tariff Rate Display for Hero Widget
 function calculateFormFare() {
   const cab = VEHICLE_PRICING[state.selectedCab] || VEHICLE_PRICING.sedan;
-  const distance = state.formDistance;
   const isRoundTrip = state.tripMode === 'round-trip';
 
   let ratePerKm = isRoundTrip ? cab.roundTripRate : cab.oneWayRate;
   let driverAllowance = cab.driverBeta;
-  let billableKm = distance;
-
-  if (isRoundTrip) {
-    const roundDistance = distance * 2;
-    billableKm = Math.max(roundDistance, cab.minKmRoundTrip);
-  }
-
-  const totalFare = (billableKm * ratePerKm) + driverAllowance;
-  const roundedFare = Math.round(totalFare / 10) * 10;
 
   const fareDisplay = document.getElementById('formEstimatedFare');
   const fareLabel = document.getElementById('formFareLabel');
   const rateDetail = document.getElementById('formRateDetail');
 
   if (fareDisplay) {
-    fareDisplay.textContent = `₹${roundedFare.toLocaleString('en-IN')}`;
+    fareDisplay.textContent = `₹${ratePerKm}/km`;
   }
 
   if (fareLabel) {
     fareLabel.textContent = isRoundTrip 
-      ? `Round-Trip Estimate (${billableKm} km billable)`
-      : `One-Way Estimate (${distance} km)`;
+      ? `${cab.shortName} (Round Trip)`
+      : `${cab.shortName} (One-Way Drop)`;
   }
 
   if (rateDetail) {
     rateDetail.textContent = isRoundTrip
-      ? `${cab.shortName} @ ₹${ratePerKm}/km (250km min) + ₹${driverAllowance} Driver Batta`
-      : `${cab.shortName} @ ₹${ratePerKm}/km + ₹${driverAllowance} Driver Batta`;
+      ? `₹${ratePerKm}/km (Min. 250 km/day) + ₹${driverAllowance} Driver Batta`
+      : `₹${ratePerKm}/km + ₹${driverAllowance} Driver Batta • Billed on actual distance`;
   }
 
-  return { roundedFare, billableKm, ratePerKm };
+  return { ratePerKm, driverAllowance };
 }
 
 // ==========================================================================
@@ -354,12 +343,6 @@ function transferCalcToBooking() {
     updateTripModeUI();
   }
 
-  const slider = document.getElementById('bookingDistance');
-  if (slider) {
-    slider.value = state.calcDistance;
-    updateFormDistance(state.calcDistance);
-  }
-
   document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
   showToast(`Applied ${VEHICLE_PRICING[state.calcCab].name} to booking form!`, 'success');
 }
@@ -384,7 +367,7 @@ async function handleBookingSubmit(event) {
   const returnDate = document.getElementById('returnDate')?.value || '';
   const passengerName = document.getElementById('passengerName').value.trim();
   const passengerPhone = document.getElementById('passengerPhone').value.trim();
-  const { roundedFare, billableKm, ratePerKm } = calculateFormFare();
+  const { ratePerKm } = calculateFormFare();
 
   if (!pickup || !drop || !pickupDate || !pickupTime || !passengerName || !passengerPhone) {
     showToast('Please fill in all required booking fields', 'error');
@@ -408,8 +391,7 @@ async function handleBookingSubmit(event) {
     pickupDate,
     pickupTime,
     returnDate,
-    vehicle: state.selectedCab,
-    distance: state.formDistance
+    vehicle: state.selectedCab
   };
 
   let bookingId = `YZG-${Math.floor(10000 + Math.random() * 90000)}`;
@@ -447,9 +429,9 @@ async function handleBookingSubmit(event) {
   document.getElementById('modalBookingId').textContent = bookingId;
   document.getElementById('modalRoute').textContent = `${pickup} → ${drop}`;
   document.getElementById('modalDateTime').textContent = `${pickupDate} at ${pickupTime}${state.tripMode === 'round-trip' ? ` (Return: ${returnDate})` : ''}`;
-  document.getElementById('modalVehicle').textContent = `${VEHICLE_PRICING[state.selectedCab].name} (₹${ratePerKm}/km)`;
+  document.getElementById('modalVehicle').textContent = `${VEHICLE_PRICING[state.selectedCab].name}`;
   document.getElementById('modalTripMode').textContent = state.tripMode === 'round-trip' ? 'Round Trip (250km min)' : 'One-Way Drop';
-  document.getElementById('modalFare').textContent = `₹${roundedFare.toLocaleString('en-IN')}`;
+  document.getElementById('modalFare').textContent = `₹${ratePerKm}/km (Billed on actuals)`;
 
   // WhatsApp Pre-filled message
   const waMessage = `*New Ride Booking - YazhGo Taxi Service*%0A` +
@@ -463,8 +445,7 @@ async function handleBookingSubmit(event) {
     `*Date & Time:* ${pickupDate} at ${pickupTime}%0A` +
     `${state.tripMode === 'round-trip' ? `*Return Date:* ${returnDate}%0A` : ''}` +
     `*Vehicle:* ${VEHICLE_PRICING[state.selectedCab].name}%0A` +
-    `*Tariff Rate:* ₹${ratePerKm}/km (Billable: ${billableKm} km)%0A` +
-    `*Est. Fare:* ₹${roundedFare}%0A` +
+    `*Tariff Rate:* ₹${ratePerKm}/km${state.tripMode === 'round-trip' ? ' (Min. 250 km coverage)' : ''}%0A` +
     `--------------------------------%0A` +
     `Please dispatch driver and share cab details.`;
 
