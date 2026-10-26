@@ -1,22 +1,26 @@
 /**
- * YazhGo Taxi Service - Ultra-Realistic Interactive 3D Car Showcase
+ * YazhGo Taxi Service — Futuristic Cinematic 3D Automotive Showroom
  * Powered by Three.js & WebGL
+ *
  * Features:
- *  - Real-time PBR automotive rendering with studio lighting & contact shadow
+ *  - Dark reflective automotive studio environment with radiant electric-red neon floor ring
  *  - Cinematic vehicle arrival animation with acceleration, braking dive & suspension settle
- *  - Physically proportional wheel rotation and braking stop
- *  - 360-degree OrbitControls with smooth damping and safe zoom limits
+ *  - Wheel rotation physically synchronized with driving velocity
+ *  - Dual real-time LED headlights with ground beam projection and flare
+ *  - Subtle electric-red studio rim lighting for photorealistic automotive curves
+ *  - High-fidelity PBR metallic paint, tinted glass, alloy rims & rubber tires
+ *  - Built-in procedural 3D automotive generator backup so 3D car ALWAYS renders
+ *  - Interactive 360-degree OrbitControls with damping and safe zoom limits
  *  - Camera presets (3/4 Beauty, Front, Side, Rear, Top, Reset)
- *  - Dual high-intensity real-time headlights with ground beam projection
- *  - Exterior automotive paint finish switcher (Glacier White, Deep Onyx, 24K Gold, Titanium Silver)
- *  - Seamless two-way integration with YazhGo booking engine and Telegram bot dispatch
- *  - Graceful WebGL fallback & responsive auto-resizing
+ *  - Paint color switcher (Titanium Silver, Obsidian Black, Pure White, Crimson Red, Midnight Blue)
+ *  - Headlight toggle & continuous 360° turntable spin
+ *  - Two-way synchronization with "Plan Your Ride" booking form & "CHOOSE YOUR RIDE" fleet selector
  */
 
 (function () {
   'use strict';
 
-  // Vehicle Configurations & Metadata
+  // Vehicle Configurations & Official Tariffs
   const SHOWCASE_VEHICLES = {
     sedan: {
       id: 'sedan',
@@ -25,8 +29,8 @@
       models: 'Maruti Swift Dzire, Toyota Etios, Honda Amaze',
       oneWayRate: 15,
       roundTripRate: 14,
-      passengers: '4 Passengers',
-      luggage: '3 Medium Bags',
+      passengers: '4 Seats',
+      luggage: '2 Bags',
       ac: 'Chilled Air Conditioning',
       driver: 'Verified Professional Chauffeur',
       batta: 400,
@@ -35,11 +39,13 @@
       modelUrls: [
         './models/sedan.glb',
         'models/sedan.glb',
-        'public/models/sedan.glb',
+        './models/taxi.glb',
+        'models/taxi.glb',
         'https://raw.githubusercontent.com/3DStreet/3dstreet-assets-dist/main/objects/vehicles-rig/sedan-rig.glb'
       ],
       wheelRadius: 0.34,
-      defaultPaint: 0xF8FAFC
+      defaultPaint: 0xC0C5CE, // Titanium Silver
+      proceduralType: 'sedan'
     },
     suv: {
       id: 'suv',
@@ -48,66 +54,68 @@
       models: 'Toyota Innova, Maruti Ertiga, Mahindra Xylo, Marazzo',
       oneWayRate: 20,
       roundTripRate: 19,
-      passengers: '6 - 7 Passengers',
-      luggage: '5 Large Bags',
+      passengers: '6 - 7 Seats',
+      luggage: '4 Bags',
       ac: 'Dual-Zone AC Vents',
       driver: 'Expert Highway Captain',
       batta: 400,
-      scale: 1.12,
+      scale: 1.14,
       yOffset: 0.0,
       modelUrls: [
         './models/suv.glb',
         'models/suv.glb',
-        'public/models/suv.glb',
         'https://raw.githubusercontent.com/3DStreet/3dstreet-assets-dist/main/objects/vehicles-rig/suv-rig.glb'
       ],
       wheelRadius: 0.38,
-      defaultPaint: 0xF1F5F9
+      defaultPaint: 0xB0B7C3, // Cool Titanium Silver
+      proceduralType: 'suv'
     },
     crysta: {
       id: 'crysta',
-      name: 'Innova Crysta',
+      name: 'Innova Crysta VIP',
       badge: 'VIP Executive Luxury',
-      models: 'Toyota Innova Crysta (Captain Seats & Dual AC)',
+      models: 'Toyota Innova Crysta (Reclining Captain Seats)',
       oneWayRate: 24,
       roundTripRate: 23,
-      passengers: '7 Passengers',
-      luggage: '5+ Large Bags',
-      ac: 'Automatic Climate Control',
+      passengers: '7 Seats',
+      luggage: '5 Large Bags',
+      ac: 'Dual-Zone Automatic Climate Control',
       driver: 'Senior Executive VIP Chauffeur',
       batta: 400,
-      scale: 1.12,
+      scale: 1.15,
       yOffset: 0.0,
       modelUrls: [
         './models/crysta.glb',
         'models/crysta.glb',
         './models/suv.glb',
-        'public/models/crysta.glb',
+        'models/suv.glb',
         'https://raw.githubusercontent.com/3DStreet/3dstreet-assets-dist/main/objects/vehicles-rig/suv-rig.glb'
       ],
-      wheelRadius: 0.38,
-      defaultPaint: 0x0A0E17
+      wheelRadius: 0.39,
+      defaultPaint: 0x1A1D24, // Obsidian Metallic Black
+      proceduralType: 'crysta'
     }
   };
 
-  // Preset Camera Angles
+  // Camera Presets
   const CAMERA_PRESETS = {
-    beauty: { pos: new THREE.Vector3(4.2, 1.8, 5.0), target: new THREE.Vector3(0, 0.6, 0) },
-    front:  { pos: new THREE.Vector3(0.0, 1.3, 5.6), target: new THREE.Vector3(0, 0.6, 0) },
-    side:   { pos: new THREE.Vector3(6.2, 1.3, 0.0), target: new THREE.Vector3(0, 0.6, 0) },
-    rear:   { pos: new THREE.Vector3(0.0, 1.4, -5.6), target: new THREE.Vector3(0, 0.6, 0) },
-    top:    { pos: new THREE.Vector3(0.0, 8.5, 0.1), target: new THREE.Vector3(0, 0.0, 0) }
+    beauty: { pos: new THREE.Vector3(4.6, 1.7, 5.2), target: new THREE.Vector3(0, 0.55, 0) },
+    front:  { pos: new THREE.Vector3(0.0, 1.25, 5.8), target: new THREE.Vector3(0, 0.55, 0) },
+    side:   { pos: new THREE.Vector3(6.4, 1.3, 0.0), target: new THREE.Vector3(0, 0.55, 0) },
+    rear:   { pos: new THREE.Vector3(-3.8, 1.6, -5.2), target: new THREE.Vector3(0, 0.55, 0) },
+    top:    { pos: new THREE.Vector3(0.0, 8.8, 0.1), target: new THREE.Vector3(0, 0.0, 0) }
   };
 
   // Color Swatches Map
   const PAINT_COLORS = {
-    white:  { hex: 0xF8FAFC, metalness: 0.65, roughness: 0.18 },
-    onyx:   { hex: 0x0A0E17, metalness: 0.90, roughness: 0.14 },
-    gold:   { hex: 0xB48228, metalness: 0.85, roughness: 0.16 },
-    silver: { hex: 0x94A3B8, metalness: 0.92, roughness: 0.15 }
+    silver: { hex: 0xC0C5CE, metalness: 0.88, roughness: 0.16 }, // Titanium Silver
+    onyx:   { hex: 0x0A0B0E, metalness: 0.92, roughness: 0.12 }, // Obsidian Black
+    white:  { hex: 0xF8FAFC, metalness: 0.65, roughness: 0.18 }, // Pure Pearl White
+    red:    { hex: 0x8B0000, metalness: 0.85, roughness: 0.15 }, // Crimson Racing Red
+    blue:   { hex: 0x0C1826, metalness: 0.90, roughness: 0.14 }  // Midnight Metallic Blue
   };
 
-  // State
+  // Core Three.js State
   let scene, camera, renderer, controls;
   let currentVehicleId = 'sedan';
   let loadedVehicles = {};
@@ -117,18 +125,18 @@
   let contactShadowMesh = null;
   let stagePlatformGroup = null;
 
-  // Headlights
+  // Real-time Headlights
   let leftHeadlight = null;
   let rightHeadlight = null;
   let headlightsOn = true;
 
-  // Animation State
+  // Cinematic Arrival Animation State
   let isAnimatingArrival = false;
   let arrivalStartTime = 0;
-  const ARRIVAL_DURATION = 2.6; // seconds
-  const START_Z = -22.0;
-  let lastCarZ = START_Z;
-  let suspensionPitch = 0;
+  const ARRIVAL_DURATION = 2.4; // seconds
+  const START_POS = new THREE.Vector3(12.0, 0, -18.0); // Drives in smoothly from back-right
+  const END_POS = new THREE.Vector3(0, 0, 0);
+  let lastCarPos = new THREE.Vector3();
   let suspensionSettleTimer = 0;
 
   // Camera Transition State
@@ -138,7 +146,7 @@
   let camStartTarget = new THREE.Vector3();
   let camEndTarget = new THREE.Vector3();
   let camTransitionProgress = 1;
-  const CAM_TRANSITION_DURATION = 1.0;
+  const CAM_TRANSITION_DURATION = 0.9;
 
   let animFrameId = null;
   let clock = new THREE.Clock();
@@ -158,7 +166,7 @@
     }
   }
 
-  // Initialize Showcase
+  // Initialize 3D Showroom
   function init() {
     const container = document.getElementById('threejsCanvasWrapper');
     if (!container) return;
@@ -179,7 +187,7 @@
     // Event Listeners
     window.addEventListener('resize', onWindowResize, false);
 
-    // Initial Load
+    // Initial Load & Arrival
     loadAndShowVehicle('sedan', true);
 
     // Start Render Loop
@@ -193,96 +201,83 @@
     dom.loaderProgressBar = document.getElementById('loaderProgressBar');
     dom.loaderPercent = document.getElementById('loaderPercent');
     dom.fallback = document.getElementById('showcaseFallback');
-    dom.hint = document.getElementById('viewportHint');
-
-    dom.carStatusBadge = document.getElementById('carStatusBadge');
-    dom.carStatusText = document.getElementById('carStatusText');
-
-    dom.hudBadge = document.getElementById('hudBadge');
-    dom.hudCarName = document.getElementById('hudCarName');
-    dom.hudCarModels = document.getElementById('hudCarModels');
-    dom.hudOneWayRate = document.getElementById('hudOneWayRate');
-    dom.hudRoundTripRate = document.getElementById('hudRoundTripRate');
-    dom.hudPassengers = document.getElementById('hudPassengers');
-    dom.hudLuggage = document.getElementById('hudLuggage');
-    dom.hudAc = document.getElementById('hudAc');
-    dom.hudDriver = document.getElementById('hudDriver');
-    dom.hudBatta = document.getElementById('hudBatta');
-    dom.hudBtnCarName = document.getElementById('hudBtnCarName');
-
+    dom.btn360Pill = document.getElementById('btn360Pill');
     dom.btnLights = document.getElementById('btnToggleHeadlights');
-    dom.btnRotate = document.getElementById('btnToggleRotate');
   }
 
   function setupScene(container) {
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xF8FAFC);
-    scene.fog = new THREE.FogExp2(0xF8FAFC, 0.022);
+    scene.background = new THREE.Color(0x07080B); // Obsidian Black
+    scene.fog = new THREE.FogExp2(0x07080B, 0.025);
 
-    const width = container.clientWidth || 800;
-    const height = container.clientHeight || 520;
+    const width = container.clientWidth || 750;
+    const height = container.clientHeight || 480;
 
-    camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
+    camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
     camera.position.copy(CAMERA_PRESETS.beauty.pos);
 
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
+    renderer.toneMappingExposure = 1.25;
 
+    container.innerHTML = '';
     container.appendChild(renderer.domElement);
   }
 
   function setupLights() {
-    // Ambient Light (Soft executive fill)
-    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.95);
+    // 1. Soft Ambient Fill
+    const ambientLight = new THREE.AmbientLight(0x161822, 1.2);
     scene.add(ambientLight);
 
-    // Sky/Ground Hemisphere Light
-    const hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0xCBD5E1, 0.65);
-    hemiLight.position.set(0, 20, 0);
+    // 2. Sky / Ground Hemisphere Light
+    const hemiLight = new THREE.HemisphereLight(0x2A2E3D, 0x0A0B0E, 0.9);
+    hemiLight.position.set(0, 25, 0);
     scene.add(hemiLight);
 
-    // Studio Key Directional Light with Soft Shadows
-    const keyLight = new THREE.DirectionalLight(0xFFFFFF, 1.4);
-    keyLight.position.set(7, 14, 9);
+    // 3. Studio Overhead Key Light (Generates soft shadows on vehicle and stage)
+    const keyLight = new THREE.DirectionalLight(0xFFFFFF, 1.8);
+    keyLight.position.set(5.5, 12, 6.5);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 2048;
-    keyLight.shadow.mapSize.height = 2048;
+    keyLight.shadow.mapSize.width = 1024;
+    keyLight.shadow.mapSize.height = 1024;
     keyLight.shadow.camera.near = 0.5;
-    keyLight.shadow.camera.far = 35;
+    keyLight.shadow.camera.far = 30;
     keyLight.shadow.camera.left = -6;
     keyLight.shadow.camera.right = 6;
     keyLight.shadow.camera.top = 6;
     keyLight.shadow.camera.bottom = -6;
-    keyLight.shadow.bias = -0.0005;
+    keyLight.shadow.bias = -0.0006;
     scene.add(keyLight);
 
-    // Studio Fill Rim Light
-    const rimLight = new THREE.DirectionalLight(0xE2E8F0, 0.8);
-    rimLight.position.set(-8, 10, -7);
+    // 4. Subtle Titanium Fill Light (Softens contrast on side flanks)
+    const fillLight = new THREE.DirectionalLight(0x94A3B8, 0.9);
+    fillLight.position.set(-6, 8, 4);
+    scene.add(fillLight);
+
+    // 5. Signature Electric-Red Studio Rim Light (Highlights car curves with cinematic red edge)
+    const rimLight = new THREE.DirectionalLight(0xFF2A3A, 2.4);
+    rimLight.position.set(-7, 3.5, -6);
     scene.add(rimLight);
 
-    // Overhead Center Turntable Spot
-    const topSpot = new THREE.SpotLight(0xFFFFFF, 0.75);
-    topSpot.position.set(0, 10, 0);
-    topSpot.angle = Math.PI / 4;
-    topSpot.penumbra = 0.8;
-    scene.add(topSpot);
+    // Secondary subtle red ground glow
+    const groundRim = new THREE.PointLight(0xE50914, 1.5, 12, 1.8);
+    groundRim.position.set(0, 0.15, -4.5);
+    scene.add(groundRim);
 
-    // Headlight SpotLights (Cast real-time light beams forward)
-    leftHeadlight = new THREE.SpotLight(0xFFF9E6, 2.5, 20, Math.PI / 6, 0.6, 1.2);
-    leftHeadlight.position.set(0.65, 0.72, 2.3);
-    leftHeadlight.target.position.set(0.7, 0.0, 12.0);
+    // 6. Real-time Projector Headlights
+    leftHeadlight = new THREE.SpotLight(0xF8FAFC, 2.5, 22, 0.42, 0.55, 1.2);
+    leftHeadlight.position.set(-0.75, 0.68, 1.9);
+    leftHeadlight.target.position.set(-0.75, 0, 10);
     scene.add(leftHeadlight);
     scene.add(leftHeadlight.target);
 
-    rightHeadlight = new THREE.SpotLight(0xFFF9E6, 2.5, 20, Math.PI / 6, 0.6, 1.2);
-    rightHeadlight.position.set(-0.65, 0.72, 2.3);
-    rightHeadlight.target.position.set(-0.7, 0.0, 12.0);
+    rightHeadlight = new THREE.SpotLight(0xF8FAFC, 2.5, 22, 0.42, 0.55, 1.2);
+    rightHeadlight.position.set(0.75, 0.68, 1.9);
+    rightHeadlight.target.position.set(0.75, 0, 10);
     scene.add(rightHeadlight);
     scene.add(rightHeadlight.target);
   }
@@ -290,75 +285,73 @@
   function setupStageFloor() {
     stagePlatformGroup = new THREE.Group();
 
-    // 1. Circular Turntable Stage (Beveled metallic disk)
-    const stageGeo = new THREE.CylinderGeometry(5.2, 5.4, 0.12, 64);
+    // 1. Polished Obsidian Turntable Platform
+    const stageGeo = new THREE.CylinderGeometry(5.2, 5.3, 0.1, 64);
     const stageMat = new THREE.MeshStandardMaterial({
-      color: 0xFFFFFF,
-      roughness: 0.35,
-      metalness: 0.15
+      color: 0x0B0D13,
+      roughness: 0.18,
+      metalness: 0.88
     });
     const stageMesh = new THREE.Mesh(stageGeo, stageMat);
-    stageMesh.position.y = -0.06;
+    stageMesh.position.y = -0.05;
     stageMesh.receiveShadow = true;
     stagePlatformGroup.add(stageMesh);
 
-    // 2. Turntable Accent Rings (24K Gold & Onyx)
-    const ringGeo = new THREE.RingGeometry(5.12, 5.24, 64);
-    const ringMat = new THREE.MeshStandardMaterial({
-      color: 0xB48228,
-      metalness: 0.9,
-      roughness: 0.2,
+    // 2. Radiant Electric-Red Neon Ring (The signature luminous ring from design)
+    const neonRingGeo = new THREE.RingGeometry(4.7, 4.88, 64);
+    const neonRingMat = new THREE.MeshBasicMaterial({
+      color: 0xFF2A3A,
       side: THREE.DoubleSide
     });
-    const goldRing = new THREE.Mesh(ringGeo, ringMat);
-    goldRing.rotation.x = -Math.PI / 2;
-    goldRing.position.y = 0.002;
-    stagePlatformGroup.add(goldRing);
+    const neonRing = new THREE.Mesh(neonRingGeo, neonRingMat);
+    neonRing.rotation.x = -Math.PI / 2;
+    neonRing.position.y = 0.003;
+    stagePlatformGroup.add(neonRing);
 
-    // 3. Inner Radial Grid Lines for high-tech showroom feel
-    const innerRingGeo = new THREE.RingGeometry(3.2, 3.24, 64);
+    // 3. Subtle Inner Concentric Ring
+    const innerRingGeo = new THREE.RingGeometry(3.1, 3.16, 64);
     const innerRingMat = new THREE.MeshBasicMaterial({
-      color: 0xE2E8F0,
+      color: 0x334155,
       side: THREE.DoubleSide
     });
     const innerRing = new THREE.Mesh(innerRingGeo, innerRingMat);
     innerRing.rotation.x = -Math.PI / 2;
-    innerRing.position.y = 0.003;
+    innerRing.position.y = 0.004;
     stagePlatformGroup.add(innerRing);
 
-    // 4. Infinite Ground Floor Plane to receive soft distant shadows
-    const groundGeo = new THREE.PlaneGeometry(60, 60);
+    // 4. Infinite Dark Ground Floor
+    const groundGeo = new THREE.PlaneGeometry(80, 80);
     const groundMat = new THREE.MeshStandardMaterial({
-      color: 0xF1F5F9,
-      roughness: 0.8,
-      metalness: 0.05
+      color: 0x050608,
+      roughness: 0.75,
+      metalness: 0.1
     });
     const groundMesh = new THREE.Mesh(groundGeo, groundMat);
     groundMesh.rotation.x = -Math.PI / 2;
-    groundMesh.position.y = -0.07;
+    groundMesh.position.y = -0.06;
     groundMesh.receiveShadow = true;
     stagePlatformGroup.add(groundMesh);
 
     scene.add(stagePlatformGroup);
 
-    // 5. Dynamic Vehicle Contact Shadow (Smooth radial shadow that tracks the car)
+    // 5. Dynamic Vehicle Contact Shadow
     const shadowCanvas = document.createElement('canvas');
     shadowCanvas.width = 256;
     shadowCanvas.height = 256;
     const ctx = shadowCanvas.getContext('2d');
     const grad = ctx.createRadialGradient(128, 128, 20, 128, 128, 120);
-    grad.addColorStop(0, 'rgba(10, 14, 23, 0.75)');
-    grad.addColorStop(0.5, 'rgba(10, 14, 23, 0.35)');
-    grad.addColorStop(1, 'rgba(10, 14, 23, 0.0)');
+    grad.addColorStop(0, 'rgba(0, 0, 0, 0.85)');
+    grad.addColorStop(0.5, 'rgba(0, 0, 0, 0.45)');
+    grad.addColorStop(1, 'rgba(0, 0, 0, 0.0)');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, 256, 256);
 
     const shadowTex = new THREE.CanvasTexture(shadowCanvas);
-    const shadowGeo = new THREE.PlaneGeometry(3.6, 5.6);
+    const shadowGeo = new THREE.PlaneGeometry(3.8, 5.8);
     const shadowMat = new THREE.MeshBasicMaterial({
       map: shadowTex,
       transparent: true,
-      opacity: 0.8,
+      opacity: 0.85,
       depthWrite: false
     });
     contactShadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
@@ -370,23 +363,15 @@
   function setupControls() {
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.06;
-    controls.target.set(0, 0.6, 0);
+    controls.dampingFactor = 0.05;
+    controls.target.set(0, 0.55, 0);
 
-    // Safe boundaries: prevent camera from dipping underground or zooming inside car
-    controls.minDistance = 3.2;
-    controls.maxDistance = 11.5;
+    // Limits
+    controls.minDistance = 3.0;
+    controls.maxDistance = 9.5;
     controls.maxPolarAngle = Math.PI / 2 - 0.04;
     controls.minPolarAngle = 0.15;
     controls.enablePan = false;
-
-    // Fade out hint on first user interaction
-    controls.addEventListener('start', () => {
-      if (dom.hint) {
-        dom.hint.style.opacity = '0';
-        dom.hint.style.pointerEvents = 'none';
-      }
-    });
   }
 
   // Load and Show a Vehicle
@@ -395,34 +380,41 @@
     if (!config) return;
 
     currentVehicleId = carId;
-    updateTabSelection(carId);
-    updateHUDDetails(config);
+    syncUIWithVehicle(carId);
 
+    // If already loaded in memory, activate directly
     if (loadedVehicles[carId]) {
       activateVehicleModel(loadedVehicles[carId], config, playArrival);
       return;
     }
 
-    // Show Loader
     showLoader(config.name);
 
-    // Load with URL Fallbacks
+    // Load GLB with fallback sequence
     loadGLBWithFallbacks(config.modelUrls, 0, (gltf) => {
       hideLoader();
       enhanceVehicleMaterials(gltf.scene, config);
       loadedVehicles[carId] = gltf.scene;
       activateVehicleModel(gltf.scene, config, playArrival);
-    }, (err) => {
+    }, () => {
+      // If GLB fails on network, build high-detail procedural 3D model backup
       hideLoader();
-      console.warn('Failed to load 3D vehicle model:', err);
-      showFallback();
+      console.log(`[Showcase3D] Building high-precision 3D procedural vehicle for ${config.name}`);
+      const proceduralCar = buildProceduralAutomotive(config);
+      loadedVehicles[carId] = proceduralCar;
+      activateVehicleModel(proceduralCar, config, playArrival);
     });
   }
 
-  // Recursive loader with multiple path fallbacks
+  // Recursive GLB loader across multiple paths
   function loadGLBWithFallbacks(urls, index, onSuccess, onError) {
     if (index >= urls.length) {
-      onError(new Error('All model fallback URLs exhausted'));
+      onError();
+      return;
+    }
+
+    if (typeof THREE.GLTFLoader === 'undefined') {
+      onError();
       return;
     }
 
@@ -431,9 +423,7 @@
 
     loader.load(
       currentUrl,
-      (gltf) => {
-        onSuccess(gltf);
-      },
+      (gltf) => onSuccess(gltf),
       (xhr) => {
         if (xhr.lengthComputable && dom.loaderPercent && dom.loaderProgressBar) {
           const pct = Math.round((xhr.loaded / xhr.total) * 100);
@@ -441,14 +431,13 @@
           dom.loaderPercent.textContent = pct + '%';
         }
       },
-      (error) => {
-        console.warn(`URL failed [${index}]: ${currentUrl}, attempting fallback...`);
+      () => {
         loadGLBWithFallbacks(urls, index + 1, onSuccess, onError);
       }
     );
   }
 
-  // Enhance Materials with Photorealistic PBR Car Paint, Glass, & Emissive Highlights
+  // Enhance Materials with Photorealistic Metallic Paint, Glass, & Alloy Shaders
   function enhanceVehicleMaterials(rootObject, config) {
     rootObject.traverse((child) => {
       if (child.isMesh) {
@@ -456,43 +445,148 @@
         child.receiveShadow = true;
 
         if (child.material) {
-          const mat = child.material;
-
-          // Check if it's glass
-          const isGlass = mat.name && mat.name.toLowerCase().includes('glass') || 
-                          child.name.toLowerCase().includes('glass') ||
-                          child.name.toLowerCase().includes('window');
+          const name = (child.material.name || child.name || '').toLowerCase();
+          const isGlass = name.includes('glass') || name.includes('window') || name.includes('windshield');
+          const isTire = name.includes('tire') || name.includes('wheel') || name.includes('rubber');
+          const isLight = name.includes('light') || name.includes('lamp');
 
           if (isGlass) {
             child.material = new THREE.MeshPhysicalMaterial({
-              color: 0x1E293B,
+              color: 0x111622,
               metalness: 0.1,
               roughness: 0.05,
               transparent: true,
               opacity: 0.45,
-              reflectivity: 0.95,
               clearcoat: 1.0,
               clearcoatRoughness: 0.05
             });
+          } else if (isTire) {
+            child.material = new THREE.MeshStandardMaterial({
+              color: 0x1A1C22,
+              roughness: 0.75,
+              metalness: 0.1
+            });
+          } else if (isLight) {
+            child.material = new THREE.MeshStandardMaterial({
+              color: 0xFFFFFF,
+              emissive: 0xFFFFFF,
+              emissiveIntensity: 1.5
+            });
           } else {
-            // High-grade metallic car paint
-            mat.roughness = 0.22;
-            mat.metalness = 0.65;
-            mat.envMapIntensity = 1.35;
+            // Metallic Car Paint
+            child.material = new THREE.MeshStandardMaterial({
+              color: config.defaultPaint,
+              roughness: 0.18,
+              metalness: 0.85
+            });
           }
         }
       }
     });
   }
 
+  // Procedural 3D Automotive Builder (Guarantees zero blank screens & instant rendering)
+  function buildProceduralAutomotive(config) {
+    const car = new THREE.Group();
+    const paintColor = config.defaultPaint;
+    const bodyMat = new THREE.MeshStandardMaterial({ color: paintColor, metalness: 0.88, roughness: 0.18 });
+    const glassMat = new THREE.MeshPhysicalMaterial({ color: 0x0F1420, metalness: 0.1, roughness: 0.05, transparent: true, opacity: 0.5 });
+    const tireMat = new THREE.MeshStandardMaterial({ color: 0x181A20, roughness: 0.8, metalness: 0.1 });
+    const rimMat = new THREE.MeshStandardMaterial({ color: 0xD8DEE9, metalness: 0.95, roughness: 0.1 });
+    const chromeMat = new THREE.MeshStandardMaterial({ color: 0xE2E8F0, metalness: 0.95, roughness: 0.08 });
+    const lightMat = new THREE.MeshStandardMaterial({ color: 0xF8FAFC, emissive: 0xFFFFFF, emissiveIntensity: 2.0 });
+    const tailMat = new THREE.MeshStandardMaterial({ color: 0xE50914, emissive: 0xE50914, emissiveIntensity: 2.2 });
+
+    const isSuv = config.proceduralType === 'suv' || config.proceduralType === 'crysta';
+    const bodyHeight = isSuv ? 1.05 : 0.85;
+    const roofHeight = isSuv ? 0.72 : 0.62;
+    const length = isSuv ? 4.6 : 4.4;
+    const width = 1.9;
+
+    // 1. Lower Chassis
+    const chassisGeo = new THREE.BoxGeometry(width, bodyHeight * 0.6, length);
+    const chassis = new THREE.Mesh(chassisGeo, bodyMat);
+    chassis.position.y = bodyHeight * 0.45;
+    chassis.castShadow = true;
+    chassis.receiveShadow = true;
+    car.add(chassis);
+
+    // 2. Cabin / Roof (Tapered)
+    const cabinLength = isSuv ? length * 0.72 : length * 0.58;
+    const cabinGeo = new THREE.BoxGeometry(width * 0.88, roofHeight, cabinLength);
+    const cabin = new THREE.Mesh(cabinGeo, bodyMat);
+    cabin.position.set(0, bodyHeight * 0.75 + roofHeight * 0.5, isSuv ? -0.1 : -0.2);
+    cabin.castShadow = true;
+    car.add(cabin);
+
+    // 3. Tinted Glass Windows
+    const glassGeo = new THREE.BoxGeometry(width * 0.89, roofHeight * 0.82, cabinLength * 0.92);
+    const glass = new THREE.Mesh(glassGeo, glassMat);
+    glass.position.copy(cabin.position);
+    car.add(glass);
+
+    // 4. Front Grille & Chrome Badge
+    const grillGeo = new THREE.BoxGeometry(width * 0.65, 0.28, 0.08);
+    const grill = new THREE.Mesh(grillGeo, chromeMat);
+    grill.position.set(0, 0.52, length * 0.5 + 0.02);
+    car.add(grill);
+
+    // 5. LED Headlights
+    [-0.72, 0.72].forEach(x => {
+      const headGeo = new THREE.BoxGeometry(0.32, 0.16, 0.1);
+      const head = new THREE.Mesh(headGeo, lightMat);
+      head.position.set(x, 0.62, length * 0.5 + 0.03);
+      car.add(head);
+
+      // Tail lights
+      const tailGeo = new THREE.BoxGeometry(0.34, 0.18, 0.1);
+      const tail = new THREE.Mesh(tailGeo, tailMat);
+      tail.position.set(x, 0.72, -length * 0.5 - 0.03);
+      car.add(tail);
+    });
+
+    // 6. Wheels with explicit bone naming for rotation
+    const wheelPositions = [
+      { name: 'wheel_F_L', x: -width * 0.52, z: length * 0.32 },
+      { name: 'wheel_F_R', x: width * 0.52, z: length * 0.32 },
+      { name: 'wheel_B_L', x: -width * 0.52, z: -length * 0.32 },
+      { name: 'wheel_B_R', x: width * 0.52, z: -length * 0.32 }
+    ];
+
+    const wheelRadius = config.wheelRadius;
+    const wheelThickness = 0.26;
+
+    wheelPositions.forEach(wp => {
+      const wheelGroup = new THREE.Group();
+      wheelGroup.name = wp.name;
+      wheelGroup.position.set(wp.x, wheelRadius, wp.z);
+
+      // Tire
+      const tireGeo = new THREE.CylinderGeometry(wheelRadius, wheelRadius, wheelThickness, 32);
+      tireGeo.rotateZ(Math.PI / 2);
+      const tire = new THREE.Mesh(tireGeo, tireMat);
+      tire.castShadow = true;
+      wheelGroup.add(tire);
+
+      // Alloy Rim
+      const rimGeo = new THREE.CylinderGeometry(wheelRadius * 0.65, wheelRadius * 0.65, wheelThickness + 0.02, 16);
+      rimGeo.rotateZ(Math.PI / 2);
+      const rim = new THREE.Mesh(rimGeo, rimMat);
+      wheelGroup.add(rim);
+
+      car.add(wheelGroup);
+    });
+
+    return car;
+  }
+
   // Activate & Mount Model into Scene
   function activateVehicleModel(modelScene, config, playArrival) {
-    // Remove previous model
+    // If another car is in scene, remove it cleanly
     if (activeCarGroup && activeCarGroup.parent) {
       scene.remove(activeCarGroup);
     }
 
-    // Create wrapper for pitch/suspension rotation
     activeCarGroup = new THREE.Group();
     activeCarMesh = modelScene;
 
@@ -501,7 +595,7 @@
     activeCarMesh.position.set(0, config.yOffset, 0);
     activeCarGroup.add(activeCarMesh);
 
-    // Locate wheel nodes/bones for rotation
+    // Locate wheel nodes for synchronized spinning
     activeWheelBones = [];
     activeCarMesh.traverse((child) => {
       const lower = child.name.toLowerCase();
@@ -510,7 +604,6 @@
       }
     });
 
-    // Add to scene
     scene.add(activeCarGroup);
 
     // Apply default paint
@@ -522,8 +615,6 @@
       activeCarGroup.position.set(0, 0, 0);
       activeCarGroup.rotation.set(0, 0, 0);
       contactShadowMesh.position.set(0, 0.015, 0);
-      contactShadowMesh.visible = true;
-      updateStatusBadge('Ready for 360° Inspection', 'green');
     }
   }
 
@@ -531,24 +622,22 @@
   function startArrivalSequence() {
     isAnimatingArrival = true;
     arrivalStartTime = clock.getElapsedTime();
-    lastCarZ = START_Z;
-    suspensionPitch = 0;
+    lastCarPos.copy(START_POS);
     suspensionSettleTimer = 0;
 
-    activeCarGroup.position.set(0, 0, START_Z);
-    activeCarGroup.rotation.set(0, 0, 0);
-    contactShadowMesh.position.set(0, 0.015, START_Z);
+    activeCarGroup.position.copy(START_POS);
+    // Face car towards entrance trajectory
+    activeCarGroup.rotation.set(0, Math.PI * 0.12, 0);
+    contactShadowMesh.position.set(START_POS.x, 0.015, START_POS.z);
 
-    // Headlights start dim, then illuminate
-    setHeadlightsIntensity(0.2);
+    // Dim headlights initially, then flare up
+    setHeadlightsIntensity(0.3);
 
-    // Smoothly frame camera to entrance angle
+    // Smoothly orbit camera to dramatic arrival angle
     animateCameraTo(CAMERA_PRESETS.beauty.pos, CAMERA_PRESETS.beauty.target, 1.8);
-
-    updateStatusBadge('Vehicle Arriving...', 'gold');
   }
 
-  // Animation Frame Loop
+  // Render & Animation Loop
   function animate() {
     animFrameId = requestAnimationFrame(animate);
 
@@ -561,56 +650,56 @@
       const animElapsed = elapsedTime - arrivalStartTime;
       const t = Math.min(animElapsed / ARRIVAL_DURATION, 1.0);
 
-      // Smooth custom deceleration curve (cubic ease-out)
+      // Deceleration curve (Cubic Ease-Out)
       const ease = 1 - Math.pow(1 - t, 3.2);
-      const currentZ = START_Z + (0.0 - START_Z) * ease;
 
-      // Calculate instantaneous movement delta
-      const deltaZ = currentZ - lastCarZ;
-      lastCarZ = currentZ;
+      const currentPos = new THREE.Vector3().lerpVectors(START_POS, END_POS, ease);
+      const deltaDistance = currentPos.distanceTo(lastCarPos);
+      lastCarPos.copy(currentPos);
 
-      // Update Car Position
-      activeCarGroup.position.z = currentZ;
-      contactShadowMesh.position.z = currentZ;
+      activeCarGroup.position.copy(currentPos);
+      contactShadowMesh.position.set(currentPos.x, 0.015, currentPos.z);
 
-      // Rotate Wheel Bones proportional to forward travel distance: deltaTheta = deltaZ / r
-      if (deltaZ > 0.0001 && config) {
-        const deltaTheta = deltaZ / config.wheelRadius;
+      // Smooth steering back to 0 angle
+      activeCarGroup.rotation.y = (1 - ease) * (Math.PI * 0.12);
+
+      // Synchronize Wheel Rotation: deltaTheta = deltaDistance / wheelRadius
+      if (deltaDistance > 0.0001 && config) {
+        const deltaTheta = deltaDistance / config.wheelRadius;
         for (let i = 0; i < activeWheelBones.length; i++) {
           activeWheelBones[i].rotateX(deltaTheta);
         }
       }
 
-      // Headlight luminous flare during drive-in
-      if (t > 0.15 && t < 0.6) {
-        const lightRatio = (t - 0.15) / 0.45;
-        setHeadlightsIntensity(0.2 + lightRatio * 2.3);
+      // Headlight Flare during approach
+      if (t > 0.2 && t < 0.7) {
+        const lightRatio = (t - 0.2) / 0.5;
+        setHeadlightsIntensity(0.3 + lightRatio * 2.2);
       }
 
-      // Realistic suspension braking dive: chassis tilts forward while decelerating
-      const speedNorm = (1 - t) * (1 - t);
-      if (t < 0.94) {
-        // Diving forward
-        activeCarGroup.rotation.x = -speedNorm * 0.024;
+      // Suspension Braking Dive & Damped Spring Rebound
+      const speedFactor = (1 - t) * (1 - t);
+      if (t < 0.92) {
+        // Forward braking pitch
+        activeCarGroup.rotation.x = -speedFactor * 0.026;
       } else {
-        // Braking rebound settling (damped oscillation)
-        suspensionSettleTimer += delta * 12;
-        const settle = Math.sin(suspensionSettleTimer) * Math.exp(-suspensionSettleTimer * 0.35) * 0.014;
+        // Rebound oscillation settling
+        suspensionSettleTimer += delta * 14;
+        const settle = Math.sin(suspensionSettleTimer) * Math.exp(-suspensionSettleTimer * 0.38) * 0.016;
         activeCarGroup.rotation.x = settle;
       }
 
       // Check arrival completion
       if (t >= 1.0) {
         isAnimatingArrival = false;
-        activeCarGroup.position.z = 0;
-        activeCarGroup.rotation.x = 0;
-        contactShadowMesh.position.z = 0;
+        activeCarGroup.position.set(0, 0, 0);
+        activeCarGroup.rotation.set(0, 0, 0);
+        contactShadowMesh.position.set(0, 0.015, 0);
         setHeadlightsIntensity(headlightsOn ? 2.5 : 0);
-        updateStatusBadge('Arrived • 360° Inspection Ready', 'green');
       }
     }
 
-    // 2. Smooth Camera Interpolation
+    // 2. Camera Interpolation
     if (isCameraTransitioning) {
       camTransitionProgress += delta / CAM_TRANSITION_DURATION;
       const ct = Math.min(camTransitionProgress, 1.0);
@@ -624,11 +713,11 @@
       }
     }
 
-    // 3. Auto-Rotation (if enabled)
+    // 3. 360° Continuous Turntable Spin
     if (autoRotateActive && !isAnimatingArrival && !isCameraTransitioning) {
-      stagePlatformGroup.rotation.y += delta * 0.25;
+      stagePlatformGroup.rotation.y += delta * 0.22;
       if (activeCarGroup) {
-        activeCarGroup.rotation.y += delta * 0.25;
+        activeCarGroup.rotation.y += delta * 0.22;
       }
     }
 
@@ -639,7 +728,7 @@
     renderer.render(scene, camera);
   }
 
-  // Smoothly Animate Camera to Target
+  // Smoothly Animate Camera to Angle
   function animateCameraTo(targetPos, targetLookAt, duration) {
     camStartPos.copy(camera.position);
     camEndPos.copy(targetPos);
@@ -649,28 +738,71 @@
     isCameraTransitioning = true;
   }
 
-  // Switch Car Category via UI Tab
+  // Two-Way UI Synchronization
+  function syncUIWithVehicle(carId) {
+    // 1. Sync Choose Your Ride cards
+    const cards = document.querySelectorAll('.choose-ride-card, .showcase-tab');
+    cards.forEach(card => {
+      const match = card.getAttribute('data-car') === carId;
+      card.classList.toggle('active', match);
+    });
+
+    // 2. Sync Carousel Dots
+    const dots = document.querySelectorAll('.showroom-dot');
+    dots.forEach(dot => {
+      dot.classList.toggle('active', dot.getAttribute('data-car') === carId);
+    });
+
+    // 3. Sync Plan Your Ride dropdown
+    const selectElem = document.getElementById('vehicleTypeSelect') || document.getElementById('selectedVehicle');
+    if (selectElem && selectElem.value !== carId) {
+      selectElem.value = carId;
+    }
+
+    // 4. Sync rate banner in hero
+    const config = SHOWCASE_VEHICLES[carId];
+    if (config) {
+      const rateDetail = document.getElementById('formRateDetail');
+      const fareDisplay = document.getElementById('formEstimatedFare');
+      const fareLabel = document.getElementById('formFareLabel');
+
+      if (fareDisplay) fareDisplay.textContent = `₹${config.oneWayRate}/km`;
+      if (fareLabel) fareLabel.textContent = `${config.name} (One-Way Drop)`;
+      if (rateDetail) rateDetail.textContent = `₹${config.oneWayRate}/km + ₹${config.batta} Driver Batta • Actual distance`;
+    }
+  }
+
+  // Switch Car Category via UI
   window.switchShowcaseCar = function (carId) {
     if (carId === currentVehicleId && !isAnimatingArrival) {
       startArrivalSequence();
       return;
     }
+
+    // Sync booking state if global state exists
+    if (window.state) {
+      window.state.selectedCab = carId;
+      if (typeof window.calculateFormFare === 'function') {
+        window.calculateFormFare();
+      }
+    }
+
     loadAndShowVehicle(carId, true);
   };
 
-  // Replay Arrival Animation
-  window.replayArrival = function () {
-    if (activeCarGroup) {
-      startArrivalSequence();
+  // 360 View Pill Toggle
+  window.toggleShowcase360 = function () {
+    autoRotateActive = !autoRotateActive;
+    if (dom.btn360Pill) {
+      dom.btn360Pill.classList.toggle('active', autoRotateActive);
     }
   };
 
-  // Set Camera Preset Angle
+  // Camera Presets
   window.setCameraAngle = function (angleKey) {
     const preset = CAMERA_PRESETS[angleKey];
     if (preset) {
       animateCameraTo(preset.pos, preset.target, 0.9);
-      updateCameraButtons(angleKey);
     }
   };
 
@@ -678,11 +810,10 @@
     window.setCameraAngle('beauty');
   };
 
-  // Toggle Headlights
+  // Headlight Toggle
   window.toggleHeadlights = function () {
     headlightsOn = !headlightsOn;
     setHeadlightsIntensity(headlightsOn ? 2.5 : 0);
-
     if (dom.btnLights) {
       dom.btnLights.classList.toggle('active', headlightsOn);
     }
@@ -695,103 +826,36 @@
     }
   }
 
-  // Toggle Auto-Rotate 360
-  window.toggleAutoRotate = function () {
-    autoRotateActive = !autoRotateActive;
-    if (dom.btnRotate) {
-      dom.btnRotate.classList.toggle('active', autoRotateActive);
-    }
-  };
-
-  // Change Paint Color
+  // Paint Color Switcher
   window.changeCarColor = function (colorName) {
     const swatch = PAINT_COLORS[colorName];
     if (swatch) {
       applyCarPaintColor(swatch.hex, swatch.metalness, swatch.roughness);
 
-      // Update swatch active state in UI
-      const swatches = document.querySelectorAll('.color-swatch');
+      const swatches = document.querySelectorAll('.paint-swatch');
       swatches.forEach(s => s.classList.remove('active'));
-      const activeSwatch = document.querySelector(`.color-swatch[data-color="${colorName}"]`);
-      if (activeSwatch) activeSwatch.classList.add('active');
+      const active = document.querySelector(`.paint-swatch[data-color="${colorName}"]`);
+      if (active) active.classList.add('active');
     }
   };
 
-  function applyCarPaintColor(hex, metalness = 0.75, roughness = 0.2) {
+  function applyCarPaintColor(hex, metalness = 0.88, roughness = 0.16) {
     if (!activeCarMesh) return;
 
     activeCarMesh.traverse((child) => {
       if (child.isMesh && child.material) {
-        const mat = child.material;
-        const name = (mat.name || '').toLowerCase();
-        const meshName = (child.name || '').toLowerCase();
-
-        // Paint target meshes (excluding glass, rubber, chrome)
-        const isGlass = name.includes('glass') || meshName.includes('glass');
-        const isTire = name.includes('tire') || name.includes('rubber') || meshName.includes('wheel');
-        const isLight = name.includes('light') || meshName.includes('light');
+        const name = (child.material.name || child.name || '').toLowerCase();
+        const isGlass = name.includes('glass') || name.includes('window');
+        const isTire = name.includes('tire') || name.includes('wheel') || name.includes('rubber');
+        const isLight = name.includes('light') || name.includes('lamp') || name.includes('tail');
 
         if (!isGlass && !isTire && !isLight) {
-          mat.color.setHex(hex);
-          mat.metalness = metalness;
-          mat.roughness = roughness;
-          mat.needsUpdate = true;
+          child.material.color.setHex(hex);
+          child.material.metalness = metalness;
+          child.material.roughness = roughness;
+          child.material.needsUpdate = true;
         }
       }
-    });
-  }
-
-  // Direct Booking Handler
-  window.bookShowcaseCar = function () {
-    // 1. Scroll smoothly to booking form
-    const bookingSection = document.getElementById('booking');
-    if (bookingSection) {
-      bookingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    // 2. Pre-select this car in the core booking engine
-    if (typeof window.selectFleetAndBook === 'function') {
-      window.selectFleetAndBook(currentVehicleId);
-    } else {
-      // Direct fallback state update
-      const cabBtn = document.querySelector(`.cab-btn[data-cab="${currentVehicleId}"]`);
-      if (cabBtn) cabBtn.click();
-    }
-  };
-
-  // UI Helpers
-  function updateTabSelection(carId) {
-    const tabs = document.querySelectorAll('.showcase-tab');
-    tabs.forEach(tab => {
-      tab.classList.toggle('active', tab.getAttribute('data-car') === carId);
-    });
-  }
-
-  function updateHUDDetails(config) {
-    if (dom.hudBadge) dom.hudBadge.textContent = config.badge;
-    if (dom.hudCarName) dom.hudCarName.textContent = config.name;
-    if (dom.hudCarModels) dom.hudCarModels.textContent = config.models;
-    if (dom.hudOneWayRate) dom.hudOneWayRate.innerHTML = `₹${config.oneWayRate} <small>/ km</small>`;
-    if (dom.hudRoundTripRate) dom.hudRoundTripRate.innerHTML = `₹${config.roundTripRate} <small>/ km</small>`;
-    if (dom.hudPassengers) dom.hudPassengers.textContent = config.passengers;
-    if (dom.hudLuggage) dom.hudLuggage.textContent = config.luggage;
-    if (dom.hudAc) dom.hudAc.textContent = config.ac;
-    if (dom.hudDriver) dom.hudDriver.textContent = config.driver;
-    if (dom.hudBatta) dom.hudBatta.textContent = `₹${config.batta}`;
-    if (dom.hudBtnCarName) dom.hudBtnCarName.textContent = config.name;
-  }
-
-  function updateStatusBadge(text, color) {
-    if (dom.carStatusText) dom.carStatusText.textContent = `${SHOWCASE_VEHICLES[currentVehicleId].name} • ${text}`;
-    if (dom.carStatusBadge) {
-      dom.carStatusBadge.className = `badge-status-pill status-${color}`;
-    }
-  }
-
-  function updateCameraButtons(activeAngle) {
-    const btns = document.querySelectorAll('.cam-btn');
-    btns.forEach(btn => {
-      btn.classList.toggle('active', btn.getAttribute('data-angle') === activeAngle);
     });
   }
 
@@ -803,8 +867,8 @@
     if (dom.loaderTitle) {
       dom.loaderTitle.textContent = `Loading ${vehicleName} 3D Model...`;
     }
-    if (dom.loaderProgressBar) dom.loaderProgressBar.style.width = '15%';
-    if (dom.loaderPercent) dom.loaderPercent.textContent = '15%';
+    if (dom.loaderProgressBar) dom.loaderProgressBar.style.width = '20%';
+    if (dom.loaderPercent) dom.loaderPercent.textContent = '20%';
   }
 
   function hideLoader() {
@@ -812,7 +876,7 @@
       dom.loader.style.opacity = '0';
       setTimeout(() => {
         dom.loader.style.display = 'none';
-      }, 350);
+      }, 300);
     }
   }
 
@@ -848,7 +912,6 @@
     }
   }
 
-  // Auto-init on DOMContentLoaded
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => checkAndInit());
   } else {
