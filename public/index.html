@@ -201,14 +201,6 @@
             <input type="date" id="returnDate">
           </div>
 
-          <!-- Approximate Distance Input -->
-          <div class="input-group">
-            <div class="calc-label-row">
-              <label for="bookingDistance"><i data-lucide="milestone"></i> Estimated Distance: <strong id="formDistanceVal">150 km</strong></label>
-            </div>
-            <input type="range" id="bookingDistance" min="20" max="600" value="150" class="range-slider" oninput="updateFormDistance(this.value)">
-          </div>
-
           <!-- Vehicle Category Selection Bar (Sedan, SUV, Crysta) -->
           <div class="input-group">
             <label><i data-lucide="car"></i> Select Vehicle Category</label>
@@ -250,14 +242,14 @@
             </div>
           </div>
 
-          <!-- Live Fare Preview Banner inside Card -->
+          <!-- Selected Vehicle Tariff Rate Banner -->
           <div class="fare-preview-box">
             <div class="fare-info">
               <div>
-                <span class="fare-label" id="formFareLabel">One-Way Fare Estimate (150 km)</span>
-                <div class="fare-rate-detail" id="formRateDetail">Sedan @ ₹15/km + ₹400 Driver Beta</div>
+                <span class="fare-label" id="formFareLabel">Sedan Prime (One-Way Drop)</span>
+                <div class="fare-rate-detail" id="formRateDetail">₹15/km + ₹400 Driver Batta • Billed on actual distance</div>
               </div>
-              <span class="fare-amount" id="formEstimatedFare">₹2,650</span>
+              <span class="fare-amount" id="formEstimatedFare">₹15/km</span>
             </div>
           </div>
 
