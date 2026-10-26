@@ -1110,6 +1110,36 @@ input, select, textarea, button {
   flex-shrink: 0;
 }
 
+/* Fleet Card Batta & Extra Terms */
+.fleet-extra-pricing {
+  margin: 16px 0;
+  text-align: center;
+  padding: 4px 0;
+}
+
+.fleet-batta {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0A0E17;
+  padding-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+
+.fleet-extra-divider {
+  height: 1px;
+  background: #E2E8F0;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.fleet-extra-terms {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #D9534F;
+  padding-top: 10px;
+  line-height: 1.45;
+}
+
 /* ==========================================================================
    SERVICES SECTION
    ========================================================================== */
