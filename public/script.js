@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initDefaultDateTime();
   initMobileMenu();
   calculateFormFare();
-  calculateLiveFare();
 });
 
 function initLucide() {
@@ -296,6 +295,7 @@ function setCalcCategory(cabType) {
 
 function calculateLiveFare() {
   const slider = document.getElementById('distanceSlider');
+  if (!slider) return;
   const distance = parseInt(slider.value, 10);
   state.calcDistance = distance;
 
