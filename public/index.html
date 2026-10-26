@@ -15,6 +15,11 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
+  <!-- Three.js 3D Engine & GLTF Automotive Loaders -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -50,6 +55,7 @@
 
       <nav class="nav-links" id="navLinks">
         <a href="#booking" class="nav-item active">Book Ride</a>
+        <a href="#showcase" class="nav-item">3D Showcase</a>
         <a href="#fleet" class="nav-item">Fleet & Rates</a>
         <a href="#routes" class="nav-item">Popular Routes</a>
         <a href="#services" class="nav-item">Services</a>
@@ -331,6 +337,203 @@
           <h3 class="step-title">Board Cab & Pay on Arrival</h3>
           <p class="step-desc">Enjoy a smooth highway trip in a clean, sanitized AC taxi. Pay easily at your final destination via Cash or UPI (GPay/PhonePe).</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3D Interactive Virtual Car Showcase Section -->
+  <section class="section showcase-section" id="showcase">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-tag"><i data-lucide="sparkles"></i> Virtual Showroom</span>
+        <h2 class="section-title">Interactive 3D Taxi Showcase</h2>
+        <p class="section-desc">Select any vehicle to watch it arrive dynamically. Rotate 360°, inspect details, toggle headlights, and switch camera angles.</p>
+      </div>
+
+      <!-- Vehicle Selection Tabs -->
+      <div class="showcase-selector-wrapper">
+        <div class="showcase-tabs" id="showcaseTabs">
+          <button class="showcase-tab active" data-car="sedan" onclick="switchShowcaseCar('sedan')">
+            <div class="tab-icon"><i data-lucide="car"></i></div>
+            <div class="tab-info">
+              <span class="tab-name">Sedan Prime</span>
+              <span class="tab-sub">Dzire • Etios • Amaze</span>
+            </div>
+            <span class="tab-rate">₹15/km</span>
+          </button>
+          
+          <button class="showcase-tab" data-car="suv" onclick="switchShowcaseCar('suv')">
+            <div class="tab-icon"><i data-lucide="truck"></i></div>
+            <div class="tab-info">
+              <span class="tab-name">Spacious SUV</span>
+              <span class="tab-sub">Ertiga • Innova • Xylo</span>
+            </div>
+            <span class="tab-rate">₹20/km</span>
+          </button>
+
+          <button class="showcase-tab" data-car="crysta" onclick="switchShowcaseCar('crysta')">
+            <div class="tab-icon"><i data-lucide="crown"></i></div>
+            <div class="tab-info">
+              <span class="tab-name">Innova Crysta</span>
+              <span class="tab-sub">VIP Luxury • Captain Seats</span>
+            </div>
+            <span class="tab-rate">₹24/km</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main 3D Stage & HUD Layout -->
+      <div class="showcase-main-grid">
+        
+        <!-- 3D Canvas Viewport Box -->
+        <div class="showcase-viewport-container" id="showcaseViewport">
+          
+          <!-- WebGL Canvas Mount -->
+          <div id="threejsCanvasWrapper" class="threejs-canvas-wrapper"></div>
+
+          <!-- Loading Progress Overlay -->
+          <div class="showcase-loader" id="showcaseLoader">
+            <div class="loader-spinner-box">
+              <div class="loader-spinner"></div>
+              <div class="loader-car-pulse"><i data-lucide="car"></i></div>
+            </div>
+            <div class="loader-title" id="loaderTitle">Preparing 3D Vehicle...</div>
+            <div class="loader-bar-bg">
+              <div class="loader-bar-fill" id="loaderProgressBar" style="width: 25%;"></div>
+            </div>
+            <span class="loader-percent" id="loaderPercent">Loading...</span>
+          </div>
+
+          <!-- Viewport Top Toolbar -->
+          <div class="viewport-top-bar">
+            <div class="badge-status-pill" id="carStatusBadge">
+              <span class="status-dot green"></span>
+              <span id="carStatusText">Sedan Prime • Ready</span>
+            </div>
+
+            <div class="viewport-top-actions">
+              <button class="tool-btn" id="btnToggleHeadlights" title="Toggle Headlights" onclick="toggleHeadlights()">
+                <i data-lucide="zap"></i> <span class="tool-label">Lights</span>
+              </button>
+              <button class="tool-btn" id="btnToggleRotate" title="Toggle 360° Auto Rotation" onclick="toggleAutoRotate()">
+                <i data-lucide="refresh-cw"></i> <span class="tool-label">Spin 360°</span>
+              </button>
+              <button class="tool-btn" id="btnReplayArrival" title="Replay Cinematic Arrival" onclick="replayArrival()">
+                <i data-lucide="play-circle"></i> <span class="tool-label">Arrival</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Interaction Gesture Hint -->
+          <div class="viewport-hint" id="viewportHint">
+            <i data-lucide="move-3d"></i> Drag to Rotate 360° • Pinch / Scroll to Zoom
+          </div>
+
+          <!-- Viewport Bottom Camera Bar -->
+          <div class="viewport-bottom-bar">
+            <div class="camera-angles-group">
+              <button class="cam-btn active" data-angle="beauty" onclick="setCameraAngle('beauty')">3/4 View</button>
+              <button class="cam-btn" data-angle="front" onclick="setCameraAngle('front')">Front</button>
+              <button class="cam-btn" data-angle="side" onclick="setCameraAngle('side')">Side</button>
+              <button class="cam-btn" data-angle="rear" onclick="setCameraAngle('rear')">Rear</button>
+              <button class="cam-btn" data-angle="top" onclick="setCameraAngle('top')">Top</button>
+              <button class="cam-btn" data-angle="reset" onclick="resetCameraAngle()" title="Reset Camera"><i data-lucide="rotate-ccw"></i></button>
+            </div>
+          </div>
+
+          <!-- Fallback Card (shown only if WebGL fails) -->
+          <div class="showcase-fallback" id="showcaseFallback" style="display: none;">
+            <div class="fallback-icon"><i data-lucide="car"></i></div>
+            <h4 class="fallback-title">Interactive 3D Preview</h4>
+            <p class="fallback-desc">WebGL hardware acceleration is limited on this device. You can still inspect full vehicle details and book your cab directly.</p>
+          </div>
+
+        </div>
+
+        <!-- Vehicle Details & Instant Booking Sidebar -->
+        <div class="showcase-details-card" id="showcaseDetailsCard">
+          
+          <div class="details-card-header">
+            <span class="details-badge" id="hudBadge">Most Popular Taxi ★</span>
+            <h3 class="details-car-name" id="hudCarName">Sedan Prime</h3>
+            <p class="details-car-models" id="hudCarModels">Maruti Swift Dzire, Toyota Etios, Honda Amaze</p>
+          </div>
+
+          <!-- Pricing Block -->
+          <div class="details-pricing-box">
+            <div class="details-rate-col">
+              <span class="rate-heading">One-Way Drop</span>
+              <div class="rate-large" id="hudOneWayRate">₹15 <small>/ km</small></div>
+              <span class="rate-subtext">No return fare</span>
+            </div>
+            <div class="rate-divider"></div>
+            <div class="details-rate-col">
+              <span class="rate-heading">Round Trip</span>
+              <div class="rate-large text-amber" id="hudRoundTripRate">₹14 <small>/ km</small></div>
+              <span class="rate-subtext">Min. 250 km/day</span>
+            </div>
+          </div>
+
+          <!-- Technical Specs Grid -->
+          <div class="details-specs-grid">
+            <div class="d-spec-item">
+              <i data-lucide="users"></i>
+              <div>
+                <span class="d-spec-label">Capacity</span>
+                <strong class="d-spec-val" id="hudPassengers">4 Passengers</strong>
+              </div>
+            </div>
+            <div class="d-spec-item">
+              <i data-lucide="luggage"></i>
+              <div>
+                <span class="d-spec-label">Luggage</span>
+                <strong class="d-spec-val" id="hudLuggage">3 Medium Bags</strong>
+              </div>
+            </div>
+            <div class="d-spec-item">
+              <i data-lucide="wind"></i>
+              <div>
+                <span class="d-spec-label">Air Conditioning</span>
+                <strong class="d-spec-val" id="hudAc">Powerful Chilled AC</strong>
+              </div>
+            </div>
+            <div class="d-spec-item">
+              <i data-lucide="shield-check"></i>
+              <div>
+                <span class="d-spec-label">Chauffeur</span>
+                <strong class="d-spec-val" id="hudDriver">Verified Pro Driver</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Batta & Extra Terms -->
+          <div class="details-extra-box">
+            <div class="d-batta-line">Batta: <strong id="hudBatta">₹400</strong></div>
+            <div class="d-extra-divider"></div>
+            <div class="d-extra-terms">Toll, Permit, Waiting &amp; Parking Extra</div>
+          </div>
+
+          <!-- Color Customizer Preview -->
+          <div class="details-color-picker">
+            <span class="color-picker-title">Exterior Paint Finish:</span>
+            <div class="color-swatches">
+              <button class="color-swatch active" data-color="white" style="background: #FFFFFF;" title="Executive Glacier White" onclick="changeCarColor('white')"></button>
+              <button class="color-swatch" data-color="onyx" style="background: #0A0E17;" title="Deep Onyx Black" onclick="changeCarColor('onyx')"></button>
+              <button class="color-swatch" data-color="gold" style="background: #B48228;" title="24K Champagne Gold" onclick="changeCarColor('gold')"></button>
+              <button class="color-swatch" data-color="silver" style="background: #94A3B8;" title="Titanium Silver" onclick="changeCarColor('silver')"></button>
+            </div>
+          </div>
+
+          <!-- Direct Booking Action Button -->
+          <div class="details-cta-box">
+            <button class="btn btn-primary btn-large btn-block" id="hudBookBtn" onclick="bookShowcaseCar()">
+              <i data-lucide="calendar-check"></i> Book <span id="hudBtnCarName">Sedan Prime</span> Now
+            </button>
+            <span class="cta-micro-note"><i data-lucide="check-circle-2"></i> Guaranteed Taxi • Zero Return Fare • Instant Dispatch</span>
+          </div>
+
+        </div>
+
       </div>
     </div>
   </section>
@@ -950,6 +1153,7 @@
         <h4 class="footer-heading">Quick Links</h4>
         <ul class="footer-nav">
           <li><a href="#booking">Book Instant Cab</a></li>
+          <li><a href="#showcase">Interactive 3D Fleet</a></li>
           <li><a href="#fleet">Fleet & Tariffs</a></li>
           <li><a href="#routes">Popular Outstation Routes</a></li>
           <li><a href="#services">One-Way Drops</a></li>
@@ -1099,5 +1303,7 @@
 
   <!-- Main JavaScript File -->
   <script src="script.js"></script>
+  <!-- 3D Automotive Virtual Showroom Module -->
+  <script src="showcase-3d.js"></script>
 </body>
 </html>
