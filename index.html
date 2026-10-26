@@ -50,7 +50,6 @@
 
       <nav class="nav-links" id="navLinks">
         <a href="#booking" class="nav-item active">Book Ride</a>
-        <a href="#calculator" class="nav-item">Fare Estimator</a>
         <a href="#fleet" class="nav-item">Fleet & Rates</a>
         <a href="#services" class="nav-item">Services</a>
         <a href="#reviews" class="nav-item">Reviews</a>
@@ -280,98 +279,6 @@
     </div>
   </section>
 
-  <!-- Interactive Live Fare Estimator Section -->
-  <section class="section calculator-section" id="calculator">
-    <div class="container">
-      <div class="section-header text-center">
-        <span class="section-tag"><i data-lucide="calculator"></i> Exact Tariffs</span>
-        <h2 class="section-title">Instant Fare & Tariff Calculator</h2>
-        <p class="section-desc">Transparent calculation grounded in YazhGo's official per-km rates and round-trip coverage.</p>
-      </div>
-
-      <div class="calculator-card">
-        <div class="calc-controls">
-          
-          <div class="calc-group">
-            <div class="calc-label-row">
-              <label for="distanceSlider"><strong>One-Way Distance:</strong></label>
-              <span class="calc-value-badge" id="distanceDisplay">150 km</span>
-            </div>
-            <input type="range" id="distanceSlider" min="20" max="600" value="150" class="range-slider" oninput="calculateLiveFare()">
-            <div class="range-scale">
-              <span>20 km</span>
-              <span>150 km (Pondy)</span>
-              <span>350 km (Bangalore)</span>
-              <span>600 km</span>
-            </div>
-          </div>
-
-          <div class="calc-group">
-            <label class="block-label">Select Vehicle Type:</label>
-            <div class="calc-category-chips">
-              <button type="button" class="chip-btn active" data-cabcalc="sedan" onclick="setCalcCategory('sedan')">
-                <i data-lucide="car"></i> Sedan (₹15 / ₹14)
-              </button>
-              <button type="button" class="chip-btn" data-cabcalc="suv" onclick="setCalcCategory('suv')">
-                <i data-lucide="truck"></i> SUV (₹20 / ₹19)
-              </button>
-              <button type="button" class="chip-btn" data-cabcalc="crysta" onclick="setCalcCategory('crysta')">
-                <i data-lucide="crown"></i> Innova Crysta (₹24 / ₹23)
-              </button>
-            </div>
-          </div>
-
-          <div class="calc-toggles-row">
-            <label class="toggle-control">
-              <input type="checkbox" id="calcRoundTripToggle" onchange="calculateLiveFare()">
-              <span class="toggle-slider"></span>
-              <span class="toggle-label"><strong>Round Trip</strong> (Applies ₹14/₹19/₹23 rate with min. 250 km coverage)</span>
-            </label>
-          </div>
-
-        </div>
-
-        <div class="calc-summary-card">
-          <h3 class="summary-title"><i data-lucide="receipt"></i> Itemized Fare Breakdown</h3>
-          
-          <div class="summary-list">
-            <div class="summary-item">
-              <span>Vehicle Category</span>
-              <span id="summaryVehName">Sedan (Dzire, Etios)</span>
-            </div>
-            <div class="summary-item">
-              <span>Rate Per KM</span>
-              <span id="summaryRatePerKm">₹15 / km (One-Way)</span>
-            </div>
-            <div class="summary-item">
-              <span>Billable Distance</span>
-              <span id="summaryBillableKm">150 km</span>
-            </div>
-            <div class="summary-item">
-              <span>Distance Subtotal</span>
-              <span id="summaryDistanceFare">₹2,250</span>
-            </div>
-            <div class="summary-item">
-              <span>Driver Allowance (Batta)</span>
-              <span id="summaryDriverAllowance">₹400</span>
-            </div>
-            <div class="summary-divider"></div>
-            <div class="summary-total">
-              <div>
-                <div class="total-label">Total Estimated Fare</div>
-                <div class="total-sub">Tolls & Parking at actuals with receipts</div>
-              </div>
-              <div class="total-price" id="calcTotalFare">₹2,650</div>
-            </div>
-          </div>
-
-          <button class="btn btn-primary btn-block btn-calc-book" onclick="transferCalcToBooking()">
-            <i data-lucide="arrow-right-circle"></i> Book with This Vehicle & Fare
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- Fleet & Tariffs Section -->
   <section class="section fleet-section" id="fleet">
@@ -763,7 +670,6 @@
         <h4 class="footer-heading">Quick Links</h4>
         <ul class="footer-nav">
           <li><a href="#booking">Book Instant Cab</a></li>
-          <li><a href="#calculator">Fare Calculator</a></li>
           <li><a href="#fleet">Fleet & Tariffs</a></li>
           <li><a href="#services">One-Way Drops</a></li>
           <li><a href="#services">Round Trip Packages</a></li>
