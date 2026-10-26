@@ -1,9 +1,5 @@
 /* ==========================================================================
-   YAZHGO TAXI SERVICE — CLIENT CORE ENGINE & BACKEND DISPATCH
-   Official Tariffs:
-    - Sedan Prime: ₹15/km (One-Way) | ₹14/km (Round-Trip) | Min 250km round trip | ₹400 Batta
-    - Spacious SUV: ₹20/km (One-Way) | ₹19/km (Round-Trip) | Min 250km round trip | ₹400 Batta
-    - Innova Crysta VIP: ₹24/km (One-Way) | ₹23/km (Round-Trip) | Min 250km round trip | ₹400 Batta
+   YAZHGO TAXI SERVICE - CLIENT SCRIPT & EXACT TARIFF ENGINE
    ========================================================================== */
 
 const API_BASE_URL = window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')
@@ -30,7 +26,7 @@ const VEHICLE_PRICING = {
   },
   crysta: {
     name: 'Innova Crysta (Premium MPV)',
-    shortName: 'Innova Crysta VIP',
+    shortName: 'Innova Crysta',
     oneWayRate: 24,
     roundTripRate: 23,
     minKmRoundTrip: 250,
@@ -39,13 +35,18 @@ const VEHICLE_PRICING = {
 };
 
 // Application State
-window.state = {
-  activeTab: 'outstation',
-  tripMode: 'one-way',
-  selectedCab: 'sedan',
-  formDistance: 150
+let state = {
+  activeTab: 'outstation',     // 'outstation', 'city', 'airport'
+  tripMode: 'one-way',         // 'one-way', 'round-trip'
+  selectedCab: 'sedan',        // 'sedan', 'suv', 'crysta'
+  formDistance: 150,
+  calcDistance: 150,
+  calcCab: 'sedan',
+  calcRoundTrip: false,
+  lastBookingDetails: null
 };
 
+// On DOM Loaded
 document.addEventListener('DOMContentLoaded', () => {
   initLucide();
   initDefaultDateTime();
@@ -54,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initLucide() {
-  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+  if (window.lucide) {
     window.lucide.createIcons();
   }
 }
@@ -63,15 +64,12 @@ function initDefaultDateTime() {
   const dateInput = document.getElementById('pickupDate');
   const timeInput = document.getElementById('pickupTime');
   
-  if (dateInput) {
+  if (dateInput && timeInput) {
     const now = new Date();
     const formattedDate = now.toISOString().split('T')[0];
     dateInput.value = formattedDate;
     dateInput.min = formattedDate;
-  }
 
-  if (timeInput) {
-    const now = new Date();
     now.setMinutes(now.getMinutes() + 30);
     const hours = String(now.getHours()).padStart(2, '0');
     const mins = String(now.getMinutes()).padStart(2, '0');
@@ -96,57 +94,157 @@ function initMobileMenu() {
   }
 }
 
-// Select Trip Mode (One Way vs Round Trip)
-function selectTripMode(mode) {
-  state.tripMode = mode;
+// Tab Switching
+function switchTripType(tabName) {
+  state.activeTab = tabName;
   
-  const pillOneWay = document.getElementById('pillOneWay');
-  const pillRoundTrip = document.getElementById('pillRoundTrip');
-  const returnGroup = document.getElementById('returnDateGroup');
+  const tabs = document.querySelectorAll('.booking-tabs .tab-btn');
+  tabs.forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.tab === tabName);
+  });
 
-  if (pillOneWay) pillOneWay.classList.toggle('active', mode === 'one-way');
-  if (pillRoundTrip) pillRoundTrip.classList.toggle('active', mode === 'round-trip');
+  const pickupInput = document.getElementById('pickupLocation');
+  const dropInput = document.getElementById('dropLocation');
+  const dropQuickTags = document.getElementById('dropQuickTags');
 
-  if (returnGroup) {
-    returnGroup.style.display = mode === 'round-trip' ? 'block' : 'none';
+  if (tabName === 'airport') {
+    pickupInput.placeholder = 'e.g. Hotel, Office, or Home Address';
+    dropInput.placeholder = 'e.g. Chennai International Airport (MAA)';
+    state.formDistance = 35;
+    if (dropQuickTags) {
+      dropQuickTags.innerHTML = `
+        <span>Airports:</span>
+        <button type="button" class="tag-btn" onclick="setDrop('Chennai Airport Terminal 1 (Domestic)')">Chennai Domestic</button>
+        <button type="button" class="tag-btn" onclick="setDrop('Chennai Airport Terminal 2 (International)')">Chennai Intl</button>
+        <button type="button" class="tag-btn" onclick="setDrop('Bangalore Airport (BLR)')">Bangalore BLR</button>
+      `;
+    }
+  } else if (tabName === 'city') {
+    pickupInput.placeholder = 'Enter pickup area or street';
+    dropInput.placeholder = 'Enter drop destination within city';
+    state.formDistance = 40;
+    if (dropQuickTags) {
+      dropQuickTags.innerHTML = `
+        <span>City Landmarks:</span>
+        <button type="button" class="tag-btn" onclick="setDrop('Marina Beach, Chennai')">Marina Beach</button>
+        <button type="button" class="tag-btn" onclick="setDrop('T. Nagar, Chennai')">T. Nagar</button>
+        <button type="button" class="tag-btn" onclick="setDrop('OMR IT Corridor')">OMR</button>
+      `;
+    }
+  } else {
+    pickupInput.placeholder = 'Pickup city or address';
+    dropInput.placeholder = 'Destination city (e.g. Pondicherry, Bangalore, Madurai)';
+    state.formDistance = 150;
+    if (dropQuickTags) {
+      dropQuickTags.innerHTML = `
+        <span>Popular Destinations:</span>
+        <button type="button" class="tag-btn" onclick="setDrop('Pondicherry')">Pondicherry</button>
+        <button type="button" class="tag-btn" onclick="setDrop('Bangalore')">Bangalore</button>
+        <button type="button" class="tag-btn" onclick="setDrop('Coimbatore')">Coimbatore</button>
+        <button type="button" class="tag-btn" onclick="setDrop('Madurai')">Madurai</button>
+        <button type="button" class="tag-btn" onclick="setDrop('Tirupati')">Tirupati</button>
+      `;
+    }
+  }
+
+  const slider = document.getElementById('bookingDistance');
+  if (slider) {
+    slider.value = state.formDistance;
+    document.getElementById('formDistanceVal').textContent = `${state.formDistance} km`;
   }
 
   calculateFormFare();
 }
 
-// Handle Vehicle Selection from Dropdown
-function onVehicleSelectChange(cabId) {
-  state.selectedCab = cabId;
+// Update Trip Mode (One Way vs Round Trip)
+function updateTripModeUI() {
+  const selectedMode = document.querySelector('input[name="tripMode"]:checked')?.value || 'one-way';
+  state.tripMode = selectedMode;
 
-  // Sync with 3D showcase
-  if (typeof window.switchShowcaseCar === 'function') {
-    window.switchShowcaseCar(cabId);
+  const returnDateGroup = document.getElementById('returnDateGroup');
+  const cardSedanRate = document.getElementById('cardSedanRate');
+  const cardSuvRate = document.getElementById('cardSuvRate');
+  const cardCrystaRate = document.getElementById('cardCrystaRate');
+
+  if (selectedMode === 'round-trip') {
+    if (returnDateGroup) returnDateGroup.style.display = 'block';
+    if (cardSedanRate) cardSedanRate.textContent = '₹14/km';
+    if (cardSuvRate) cardSuvRate.textContent = '₹19/km';
+    if (cardCrystaRate) cardCrystaRate.textContent = '₹23/km';
+  } else {
+    if (returnDateGroup) returnDateGroup.style.display = 'none';
+    if (cardSedanRate) cardSedanRate.textContent = '₹15/km';
+    if (cardSuvRate) cardSuvRate.textContent = '₹20/km';
+    if (cardCrystaRate) cardCrystaRate.textContent = '₹24/km';
   }
 
   calculateFormFare();
 }
 
-// Vehicle Selection from Cards or External Actions
-function selectFleetAndBook(cabType) {
+function updateFormDistance(val) {
+  state.formDistance = parseInt(val, 10);
+  const display = document.getElementById('formDistanceVal');
+  if (display) {
+    display.textContent = `${state.formDistance} km`;
+  }
+  calculateFormFare();
+}
+
+// Quick Location Fillers
+function setPickup(location) {
+  document.getElementById('pickupLocation').value = location;
+  showToast(`Pickup set: ${location}`);
+  calculateFormFare();
+}
+
+function setDrop(location) {
+  document.getElementById('dropLocation').value = location;
+  showToast(`Drop set: ${location}`);
+  calculateFormFare();
+}
+
+function setRouteQuick(pickup, drop) {
+  document.getElementById('pickupLocation').value = pickup;
+  document.getElementById('dropLocation').value = drop;
+  document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+  showToast(`Route set: ${pickup} → ${drop}`);
+  calculateFormFare();
+}
+
+// Geolocation Detection
+function detectCurrentLocation() {
+  if (!navigator.geolocation) {
+    showToast('Geolocation is not supported by your browser', 'error');
+    return;
+  }
+
+  showToast('Detecting location...');
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const { latitude, longitude } = position.coords;
+      document.getElementById('pickupLocation').value = `Current Location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`;
+      showToast('Location detected successfully!', 'success');
+      calculateFormFare();
+    },
+    () => {
+      document.getElementById('pickupLocation').value = 'Anna Nagar, Chennai (Current Location)';
+      showToast('Set to current detected area.', 'success');
+      calculateFormFare();
+    },
+    { timeout: 8000 }
+  );
+}
+
+// Vehicle Selection in Form
+function selectCabType(cabType) {
   state.selectedCab = cabType;
-
-  // Sync dropdown
-  const selectElem = document.getElementById('selectedVehicle');
-  if (selectElem) selectElem.value = cabType;
-
-  // Sync 3D showcase
-  if (typeof window.switchShowcaseCar === 'function') {
-    window.switchShowcaseCar(cabType);
-  }
+  
+  const choices = document.querySelectorAll('.vehicle-selector-grid .vehicle-card-choice');
+  choices.forEach(card => {
+    card.classList.toggle('active', card.dataset.cab === cabType);
+  });
 
   calculateFormFare();
-
-  const bookingElem = document.getElementById('booking');
-  if (bookingElem) {
-    bookingElem.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  showToast(`Selected ${VEHICLE_PRICING[cabType].name}! Fill in your route to continue.`, 'success');
 }
 
 // Calculate Tariff Rate Display for Hero Widget
@@ -174,90 +272,92 @@ function calculateFormFare() {
   if (rateDetail) {
     rateDetail.textContent = isRoundTrip
       ? `₹${ratePerKm}/km (Min. 250 km/day) + ₹${driverAllowance} Driver Batta`
-      : `₹${ratePerKm}/km + ₹${driverAllowance} Driver Batta • Actual distance`;
+      : `₹${ratePerKm}/km + ₹${driverAllowance} Driver Batta • Billed on actual distance`;
   }
 
-  return { ratePerKm, driverAllowance, cab };
-}
-
-// Quick Route Preset
-function setRouteQuick(pickup, drop) {
-  const pInput = document.getElementById('pickupLocation');
-  const dInput = document.getElementById('dropLocation');
-  if (pInput) pInput.value = pickup;
-  if (dInput) dInput.value = drop;
-
-  const bookingElem = document.getElementById('booking');
-  if (bookingElem) {
-    bookingElem.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  showToast(`Route applied: ${pickup} → ${drop}`, 'success');
-  calculateFormFare();
-}
-
-// Geolocation Detection
-function detectCurrentLocation() {
-  if (!navigator.geolocation) {
-    showToast('Geolocation is not supported by your browser', 'error');
-    return;
-  }
-
-  showToast('Detecting location...');
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const { latitude, longitude } = position.coords;
-      const pInput = document.getElementById('pickupLocation');
-      if (pInput) {
-        pInput.value = `Current Location (${latitude.toFixed(3)}, ${longitude.toFixed(3)})`;
-      }
-      showToast('Location detected successfully!', 'success');
-    },
-    () => {
-      const pInput = document.getElementById('pickupLocation');
-      if (pInput) {
-        pInput.value = 'Chennai / Thanjavur (Current Area)';
-      }
-      showToast('Set to current regional hub.', 'success');
-    },
-    { timeout: 7000 }
-  );
+  return { ratePerKm, driverAllowance };
 }
 
 // ==========================================================================
-// FORM SUBMISSION & BACKEND TELEGRAM / WHATSAPP DISPATCH
+// FARE ESTIMATOR / CALCULATOR TAB LOGIC
 // ==========================================================================
 
-// Step 1: "FIND MY RIDE" Click in Hero Form
-function handleFindRideSubmit(event) {
-  event.preventDefault();
+function setCalcCategory(cabType) {
+  state.calcCab = cabType;
+  
+  const chips = document.querySelectorAll('.calc-category-chips .chip-btn');
+  chips.forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.cabcalc === cabType);
+  });
 
-  const pickup = document.getElementById('pickupLocation').value.trim();
-  const drop = document.getElementById('dropLocation').value.trim();
-  const pickupDate = document.getElementById('pickupDate').value;
-  const pickupTime = document.getElementById('pickupTime').value;
-
-  if (!pickup || !drop || !pickupDate || !pickupTime) {
-    showToast('Please enter pickup, drop, date, and time.', 'error');
-    return;
-  }
-
-  const { ratePerKm, cab } = calculateFormFare();
-
-  // Populate Passenger Details Modal Summary
-  const routeSummary = document.getElementById('modalRouteSummary');
-  const dtSummary = document.getElementById('modalDateTimeSummary');
-  const vehSummary = document.getElementById('modalVehicleSummary');
-
-  if (routeSummary) routeSummary.textContent = `${pickup} → ${drop}`;
-  if (dtSummary) dtSummary.textContent = `${pickupDate} at ${pickupTime} (${state.tripMode.toUpperCase()})`;
-  if (vehSummary) vehSummary.textContent = `${cab.name} • ₹${ratePerKm}/km`;
-
-  openModal('passengerDetailsModal');
+  calculateLiveFare();
 }
 
-// Step 2: Final Passenger Submission (POST to /api/bookings)
-async function handleFinalBookingSubmit(event) {
+function calculateLiveFare() {
+  const slider = document.getElementById('distanceSlider');
+  if (!slider) return;
+  const distance = parseInt(slider.value, 10);
+  state.calcDistance = distance;
+
+  const distanceDisplay = document.getElementById('distanceDisplay');
+  if (distanceDisplay) {
+    distanceDisplay.textContent = `${distance} km`;
+  }
+
+  const cab = VEHICLE_PRICING[state.calcCab] || VEHICLE_PRICING.sedan;
+  const isRoundTrip = document.getElementById('calcRoundTripToggle')?.checked || false;
+  state.calcRoundTrip = isRoundTrip;
+
+  let ratePerKm = isRoundTrip ? cab.roundTripRate : cab.oneWayRate;
+  let driverAllowance = cab.driverBeta;
+  let billableKm = distance;
+
+  if (isRoundTrip) {
+    const roundDistance = distance * 2;
+    billableKm = Math.max(roundDistance, cab.minKmRoundTrip);
+  }
+
+  const distanceFare = billableKm * ratePerKm;
+  const total = distanceFare + driverAllowance;
+  const roundedFare = Math.round(total / 10) * 10;
+
+  // Update Summary Card
+  document.getElementById('summaryVehName').textContent = cab.name;
+  document.getElementById('summaryRatePerKm').textContent = isRoundTrip
+    ? `₹${ratePerKm} / km (Round-Trip Rate)`
+    : `₹${ratePerKm} / km (One-Way Drop Rate)`;
+  document.getElementById('summaryBillableKm').textContent = isRoundTrip
+    ? `${billableKm} km (Min. 250 km coverage applied)`
+    : `${billableKm} km`;
+  document.getElementById('summaryDistanceFare').textContent = `₹${distanceFare.toLocaleString('en-IN')}`;
+  document.getElementById('summaryDriverAllowance').textContent = `₹${driverAllowance}`;
+  document.getElementById('calcTotalFare').textContent = `₹${roundedFare.toLocaleString('en-IN')}`;
+}
+
+function transferCalcToBooking() {
+  selectCabType(state.calcCab);
+  
+  const roundRadio = document.querySelector(`input[name="tripMode"][value="${state.calcRoundTrip ? 'round-trip' : 'one-way'}"]`);
+  if (roundRadio) {
+    roundRadio.checked = true;
+    updateTripModeUI();
+  }
+
+  document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+  showToast(`Applied ${VEHICLE_PRICING[state.calcCab].name} to booking form!`, 'success');
+}
+
+function selectFleetAndBook(cabType) {
+  selectCabType(cabType);
+  document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+  showToast(`Selected ${VEHICLE_PRICING[cabType].name}! Fill in details to confirm.`, 'success');
+}
+
+// ==========================================================================
+// FORM SUBMISSION, TELEGRAM BOT NOTIFICATION & MODAL LOGIC
+// ==========================================================================
+
+async function handleBookingSubmit(event) {
   event.preventDefault();
 
   const pickup = document.getElementById('pickupLocation').value.trim();
@@ -269,15 +369,15 @@ async function handleFinalBookingSubmit(event) {
   const passengerPhone = document.getElementById('passengerPhone').value.trim();
   const { ratePerKm } = calculateFormFare();
 
-  if (!passengerName || !/^[0-9]{10}$/.test(passengerPhone)) {
-    showToast('Please enter your full name and a valid 10-digit mobile number.', 'error');
+  if (!pickup || !drop || !pickupDate || !pickupTime || !passengerName || !passengerPhone) {
+    showToast('Please fill in all required booking fields', 'error');
     return;
   }
 
-  const submitBtn = document.getElementById('modalFinalSubmitBtn');
+  const submitBtn = document.getElementById('bookingSubmitBtn');
   if (submitBtn) {
     submitBtn.disabled = true;
-    submitBtn.innerHTML = `<i data-lucide="loader-2"></i> Confirming & Dispatching...`;
+    submitBtn.innerHTML = `<i data-lucide="loader-2"></i> Submitting & Notifying Telegram...`;
     initLucide();
   }
 
@@ -286,14 +386,15 @@ async function handleFinalBookingSubmit(event) {
     phone: passengerPhone,
     pickup,
     drop,
+    tripType: state.activeTab,
+    tripMode: state.tripMode,
     pickupDate,
     pickupTime,
     returnDate,
-    vehicle: state.selectedCab,
-    tripType: state.activeTab,
-    tripMode: state.tripMode,
-    distance: state.formDistance
+    vehicle: state.selectedCab
   };
+
+  let bookingId = `YZG-${Math.floor(10000 + Math.random() * 90000)}`;
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/bookings`, {
@@ -305,63 +406,46 @@ async function handleFinalBookingSubmit(event) {
     const data = await response.json();
 
     if (response.ok && data.success) {
-      closeModal('passengerDetailsModal');
-      showBookingSuccess(data.booking, passengerName, passengerPhone, pickup, drop, pickupDate, pickupTime, returnDate, ratePerKm);
-    } else {
-      // Graceful offline/static fallback for GitHub Pages
-      closeModal('passengerDetailsModal');
-      const fallbackBooking = {
-        id: `YZG-${Math.floor(10000 + Math.random() * 90000)}`,
-        fare: 150 * ratePerKm + 400
-      };
-      showBookingSuccess(fallbackBooking, passengerName, passengerPhone, pickup, drop, pickupDate, pickupTime, returnDate, ratePerKm);
+      bookingId = data.booking.id;
+      if (data.telegramNotified) {
+        showToast('Booking recorded & Telegram alert dispatched!', 'success');
+      } else {
+        showToast('Booking saved successfully!', 'success');
+      }
     }
   } catch (err) {
-    console.warn('Network booking fallback:', err);
-    closeModal('passengerDetailsModal');
-    const fallbackBooking = {
-      id: `YZG-${Math.floor(10000 + Math.random() * 90000)}`,
-      fare: 150 * ratePerKm + 400
-    };
-    showBookingSuccess(fallbackBooking, passengerName, passengerPhone, pickup, drop, pickupDate, pickupTime, returnDate, ratePerKm);
+    console.warn('Backend API note:', err.message);
+    showToast('Booking processed on client system!', 'success');
   } finally {
     if (submitBtn) {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = `<i data-lucide="send"></i> Confirm &amp; Dispatch Cab`;
+      submitBtn.innerHTML = `<i data-lucide="check-circle"></i> Confirm Booking Now`;
       initLucide();
     }
   }
-}
 
-// Display Booking Success Modal & WhatsApp Pre-fill
-function showBookingSuccess(booking, passengerName, passengerPhone, pickup, drop, pickupDate, pickupTime, returnDate, ratePerKm) {
-  const bId = booking.id || 'YZG-CONFIRMED';
-
-  const modalIdElem = document.getElementById('modalBookingId');
-  const modalRouteElem = document.getElementById('modalSuccessRoute');
-  const modalDateTimeElem = document.getElementById('modalSuccessDateTime');
-  const modalVehElem = document.getElementById('modalSuccessVehicle');
-  const modalFareElem = document.getElementById('modalSuccessFare');
-
-  if (modalIdElem) modalIdElem.textContent = bId;
-  if (modalRouteElem) modalRouteElem.textContent = `${pickup} → ${drop}`;
-  if (modalDateTimeElem) modalDateTimeElem.textContent = `${pickupDate} at ${pickupTime}${state.tripMode === 'round-trip' ? ` (Return: ${returnDate})` : ''}`;
-  if (modalVehElem) modalVehElem.textContent = `${VEHICLE_PRICING[state.selectedCab].name}`;
-  if (modalFareElem) modalFareElem.textContent = `₹${ratePerKm}/km (Billed on actual distance + ₹400 Batta)`;
+  // Update Confirmation Modal
+  document.getElementById('modalPassengerName').textContent = passengerName;
+  document.getElementById('modalBookingId').textContent = bookingId;
+  document.getElementById('modalRoute').textContent = `${pickup} → ${drop}`;
+  document.getElementById('modalDateTime').textContent = `${pickupDate} at ${pickupTime}${state.tripMode === 'round-trip' ? ` (Return: ${returnDate})` : ''}`;
+  document.getElementById('modalVehicle').textContent = `${VEHICLE_PRICING[state.selectedCab].name}`;
+  document.getElementById('modalTripMode').textContent = state.tripMode === 'round-trip' ? 'Round Trip (250km min)' : 'One-Way Drop';
+  document.getElementById('modalFare').textContent = `₹${ratePerKm}/km (Billed on actuals)`;
 
   // WhatsApp Pre-filled message
   const waMessage = `*New Ride Booking - YazhGo Taxi Service*%0A` +
     `--------------------------------%0A` +
-    `*Booking ID:* ${bId}%0A` +
+    `*Booking ID:* ${bookingId}%0A` +
     `*Customer:* ${passengerName}%0A` +
     `*Phone:* ${passengerPhone}%0A` +
-    `*Mode:* ${state.tripMode.toUpperCase()}%0A` +
+    `*Mode:* ${state.tripMode.toUpperCase()} (${state.activeTab})%0A` +
     `*Pickup:* ${pickup}%0A` +
     `*Drop:* ${drop}%0A` +
     `*Date & Time:* ${pickupDate} at ${pickupTime}%0A` +
     `${state.tripMode === 'round-trip' ? `*Return Date:* ${returnDate}%0A` : ''}` +
     `*Vehicle:* ${VEHICLE_PRICING[state.selectedCab].name}%0A` +
-    `*Tariff Rate:* ₹${ratePerKm}/km + ₹400 Driver Batta%0A` +
+    `*Tariff Rate:* ₹${ratePerKm}/km${state.tripMode === 'round-trip' ? ' (Min. 250 km coverage)' : ''}%0A` +
     `--------------------------------%0A` +
     `Please dispatch driver and share cab details.`;
 
@@ -371,71 +455,89 @@ function showBookingSuccess(booking, passengerName, passengerPhone, pickup, drop
   }
 
   openModal('bookingSuccessModal');
-  showToast('Booking request received! Cab dispatching.', 'success');
 }
 
-// Direct WhatsApp Booking Handler
 function bookViaWhatsAppDirect() {
-  const pickup = document.getElementById('pickupLocation')?.value.trim() || 'Not specified';
-  const drop = document.getElementById('dropLocation')?.value.trim() || 'Not specified';
-  const date = document.getElementById('pickupDate')?.value || 'Immediate';
-  const time = document.getElementById('pickupTime')?.value || 'ASAP';
+  const pickup = document.getElementById('pickupLocation').value.trim() || 'Not specified';
+  const drop = document.getElementById('dropLocation').value.trim() || 'Not specified';
+  const date = document.getElementById('pickupDate').value || 'Immediate';
+  const time = document.getElementById('pickupTime').value || 'ASAP';
+  const name = document.getElementById('passengerName').value.trim() || 'Customer';
+  const phone = document.getElementById('passengerPhone').value.trim() || '';
   const vehicle = VEHICLE_PRICING[state.selectedCab].name;
   const rate = state.tripMode === 'round-trip' ? VEHICLE_PRICING[state.selectedCab].roundTripRate : VEHICLE_PRICING[state.selectedCab].oneWayRate;
 
   const msg = `*Instant Cab Booking Request - YazhGo Taxi*%0A` +
-    `--------------------------------%0A` +
-    `*Trip Mode:* ${state.tripMode.toUpperCase()}%0A` +
-    `*Pickup:* ${pickup}%0A` +
-    `*Drop:* ${drop}%0A` +
-    `*Date & Time:* ${date} at ${time}%0A` +
-    `*Preferred Cab:* ${vehicle} (₹${rate}/km + ₹400 Batta)%0A` +
-    `--------------------------------%0A` +
-    `Kindly share availability and confirm driver.`;
+    `Customer: ${name}%0A` +
+    `Phone: ${phone}%0A` +
+    `Mode: ${state.tripMode.toUpperCase()}%0A` +
+    `Pickup: ${pickup}%0A` +
+    `Drop: ${drop}%0A` +
+    `Date & Time: ${date} ${time}%0A` +
+    `Vehicle: ${vehicle} (₹${rate}/km)%0A` +
+    `Please confirm driver availability.`;
 
   window.open(`https://wa.me/919489038346?text=${msg}`, '_blank');
 }
 
-// Driver Partner Attachment Modal
-function openDriverModal() {
-  openModal('driverPartnerModal');
+function printBookingTicket() {
+  window.print();
 }
 
-async function handleDriverPartnerSubmit(event) {
+// Driver Partner Registration
+async function handleDriverSubmit(event) {
   event.preventDefault();
-  const name = document.getElementById('partnerName').value.trim();
-  const phone = document.getElementById('partnerPhone').value.trim();
-  const city = document.getElementById('partnerCity').value.trim();
-  const vehicle = document.getElementById('partnerVehicle').value;
+  const name = document.getElementById('driverName').value.trim();
+  const phone = document.getElementById('driverPhone').value.trim();
+  const city = document.getElementById('driverCity').value.trim();
+  const carModel = document.getElementById('driverCarModel').value.trim();
+  const carNumber = document.getElementById('driverCarNumber').value.trim();
 
-  if (!name || !/^[0-9]{10}$/.test(phone) || !city) {
-    showToast('Please fill all driver details correctly', 'error');
-    return;
+  const driverBtn = document.getElementById('driverSubmitBtn');
+  if (driverBtn) {
+    driverBtn.disabled = true;
+    driverBtn.innerHTML = `<i data-lucide="loader-2"></i> Submitting...`;
+    initLucide();
   }
 
   try {
-    const res = await fetch(`${API_BASE_URL}/api/partners`, {
+    const response = await fetch(`${API_BASE_URL}/api/partners`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, phone, city, vehicleType: vehicle })
+      body: JSON.stringify({ name, phone, city, carModel, carNumber })
     });
-    const data = await res.json();
-    if (res.ok && data.success) {
-      closeModal('driverPartnerModal');
-      showToast('Application submitted! Our fleet manager will contact you.', 'success');
+
+    const data = await response.json();
+    closeModal('driverModal');
+
+    if (response.ok && data.success) {
+      showToast(`Partner application submitted! Partner ID: ${data.partner.id}`, 'success');
     } else {
-      closeModal('driverPartnerModal');
-      showToast('Registration received! Fleet team will call you within 24h.', 'success');
+      showToast(`Application received! Onboarding team will contact ${phone}.`, 'success');
     }
-  } catch (e) {
-    closeModal('driverPartnerModal');
-    showToast('Registration received! We will contact you soon.', 'success');
+  } catch (err) {
+    closeModal('driverModal');
+    showToast(`Application received! Onboarding team will contact ${phone}.`, 'success');
+  } finally {
+    if (driverBtn) {
+      driverBtn.disabled = false;
+      driverBtn.innerHTML = `<i data-lucide="send"></i> Submit Partner Application`;
+      initLucide();
+    }
   }
+
+  const waPartnerMsg = `*New Driver Partner Application - YazhGo Taxi*%0A` +
+    `Owner Name: ${name}%0A` +
+    `Mobile: ${phone}%0A` +
+    `City: ${city}%0A` +
+    `Vehicle: ${carModel} (${carNumber})`;
+  
+  window.open(`https://wa.me/919489038346?text=${waPartnerMsg}`, '_blank');
 }
 
-// General Modal Utilities
-function openModal(id) {
-  const modal = document.getElementById(id);
+// Modal Helpers
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
   if (modal) {
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
@@ -443,31 +545,45 @@ function openModal(id) {
   }
 }
 
-function closeModal(id) {
-  const modal = document.getElementById(id);
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
   if (modal) {
     modal.style.display = 'none';
     document.body.style.overflow = '';
   }
 }
 
+function openDriverModal() {
+  openModal('driverModal');
+}
+
 // Toast Notifications
 function showToast(message, type = 'info') {
-  let toast = document.getElementById('toastNotification');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = 'toastNotification';
-    toast.className = 'toast-notification';
-    document.body.appendChild(toast);
-  }
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
 
-  const iconName = type === 'error' ? 'alert-circle' : type === 'success' ? 'check-circle-2' : 'info';
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  
+  let iconName = 'info';
+  if (type === 'success') iconName = 'check-circle';
+  if (type === 'error') iconName = 'alert-circle';
+
   toast.innerHTML = `<i data-lucide="${iconName}"></i> <span>${message}</span>`;
-  toast.className = `toast-notification show ${type}`;
+  container.appendChild(toast);
   initLucide();
 
-  clearTimeout(toast._timeout);
-  toast._timeout = setTimeout(() => {
-    toast.className = 'toast-notification';
-  }, 3500);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(100%)';
+    toast.style.transition = 'all 0.3s ease';
+    setTimeout(() => toast.remove(), 300);
+  }, 4000);
 }
+
+window.addEventListener('click', (e) => {
+  if (e.target.classList.contains('modal-overlay')) {
+    e.target.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+});
