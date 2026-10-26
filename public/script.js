@@ -22,7 +22,7 @@ const VEHICLE_PRICING = {
     oneWayRate: 20,
     roundTripRate: 19,
     minKmRoundTrip: 250,
-    driverBeta: 500
+    driverBeta: 400
   },
   crysta: {
     name: 'Innova Crysta (Premium MPV)',
@@ -30,7 +30,7 @@ const VEHICLE_PRICING = {
     oneWayRate: 24,
     roundTripRate: 23,
     minKmRoundTrip: 250,
-    driverBeta: 600
+    driverBeta: 400
   }
 };
 
