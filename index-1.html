@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>YazhGo Taxi Service | With You, Always</title>
+<meta name="description" content="One-way drops and round-trip outstation cabs across Tamil Nadu, Bangalore, Kerala and Andhra Pradesh at transparent per-km rates.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--olive:#2f3422;--olive2:#3d4430;--cream:#f4e8d6;--sand:#ead9bf;--card:#fbf4e8;--tan:#e2b47c;--ink:#2a2d1f;--muted:#6d6a58;--ok:#9cc486;
+--serif:"Playfair Display",Georgia,serif;--sans:Poppins,system-ui,sans-serif;color-scheme:light}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:var(--sans);background:var(--cream);color:var(--ink);line-height:1.6;padding-top:env(safe-area-inset-top,0px)}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--tan);outline-offset:2px}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.15}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+section{padding:64px 0}
+.btn{display:inline-block;border:0;border-radius:999px;padding:11px 24px;font:500 14px var(--sans);cursor:pointer;background:var(--tan);color:var(--olive)}
+.btn.dark{background:var(--olive);color:var(--cream);border-radius:8px}
+.btn.ghost{background:transparent;color:var(--cream);border:1px solid #e2b47c88}
+header{position:sticky;top:0;z-index:20;background:var(--olive);color:var(--cream);padding-top:env(safe-area-inset-top,0px)}
+header .wrap{display:flex;align-items:center;gap:22px;height:62px}
+.logo{font:700 22px var(--serif);display:flex;align-items:center;gap:8px;color:var(--tan)}
+nav{display:flex;gap:20px;margin-left:auto;font-size:13px}
+nav a{opacity:.9}nav a:hover{color:var(--tan)}
+.pill{border:1px solid var(--tan);border-radius:999px;padding:7px 16px;font-size:13px;color:var(--cream)}
+.hero{background:linear-gradient(120deg,#2b3020 0%,#3a3a2a 45%,#8a6a49 100%);color:var(--cream);padding:70px 0 0;position:relative;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:20px;align-items:center}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--tan);text-transform:uppercase;margin-bottom:14px}
+.hero h1{font-size:clamp(38px,5.5vw,64px);margin-bottom:14px}
+.hero p{font-size:17px;margin-bottom:26px}
+.hero .cta{display:flex;gap:14px;flex-wrap:wrap}
+.hero svg.car{width:100%;height:auto}
+.strip{background:var(--card);border-radius:18px 18px 0 0;margin-top:30px;display:grid;grid-template-columns:repeat(4,1fr);padding:22px 10px;color:var(--ink);text-align:center;font-size:13px}
+.strip b{display:block;font-size:20px;font-family:var(--serif)}
+.strip div+div{border-left:1px solid #d8c8ab}
+.title{text-align:center;margin-bottom:34px}
+.title small{display:block;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.title h2{font-size:clamp(30px,4vw,42px)}
+.title p{color:var(--muted);margin-top:8px}
+.book{background:linear-gradient(180deg,var(--olive) 0 190px,var(--sand) 190px)}
+.book .title{color:var(--cream)}.book .title small,.book .title p{color:#d9cbb0}
+.panel{background:var(--card);border-radius:18px;padding:22px;box-shadow:0 14px 40px #2f342233;max-width:860px;margin:0 auto}
+.tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.tabs button{flex:1;min-width:110px;border:0;border-radius:8px;padding:10px;font:500 13px var(--sans);background:var(--sand);color:var(--ink);cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--olive);color:var(--cream)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{display:block;background:#fff8ec;border:1px solid #e6d6ba;border-radius:10px;padding:8px 12px;font-size:12px;color:var(--muted)}
+label input,label select{display:block;width:100%;border:0;background:none;font:500 14px var(--sans);color:var(--ink);padding:2px 0;outline:0}
+label:focus-within{border-color:var(--olive)}
+.full{grid-column:1/-1}
+.est{margin:14px 0 0;font-size:14px;color:var(--olive);font-weight:500}
+.panel .btn{width:100%;margin-top:12px;padding:13px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:var(--card);border-radius:16px;padding:22px;box-shadow:0 8px 26px #2f342220;display:flex;flex-direction:column;gap:6px}
+.card svg{width:100%;height:90px;margin-bottom:6px}
+.card h3{font-size:22px}
+.card .sub{font-size:13px;color:var(--muted)}
+.rate{font-size:14px}.rate b{font-family:var(--serif);font-size:24px}
+.card ul{list-style:none;font-size:13px;color:var(--muted);padding:0;margin:6px 0 10px}
+.card .btn{margin-top:auto;text-align:center}
+.flag{font-size:11px;background:var(--tan);color:var(--olive);border-radius:999px;padding:2px 10px;align-self:flex-start;font-weight:600}
+.outst{background:var(--sand)}
+.routes{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.route{background:var(--card);border-radius:14px;padding:16px;font-size:13px}
+.route h3{font-size:17px;margin-bottom:2px}
+.route small{color:var(--muted)}
+.route p{margin-top:8px;display:flex;justify-content:space-between}
+.route .btn{padding:7px 14px;font-size:12px;margin-top:10px;width:100%;text-align:center}
+.svc{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px}
+.svc div{background:var(--olive);color:var(--cream);border-radius:14px;padding:18px;font-size:13px}
+.svc h3{font-size:17px;color:var(--tan);margin-bottom:6px}
+.about{display:grid;grid-template-columns:1.1fr 1fr;gap:34px;align-items:center}
+.about h2{font-size:clamp(30px,4vw,44px);margin-bottom:14px}
+.about p{color:var(--muted);margin-bottom:12px}
+.visual{background:linear-gradient(160deg,#8a6a49,#2f3422);border-radius:22px;aspect-ratio:4/3;display:grid;place-items:end start;padding:26px;color:var(--cream);font:italic 600 28px/1.2 var(--serif)}
+.stats{display:flex;gap:26px;margin-top:20px;background:var(--card);border-radius:14px;padding:16px 20px}
+.stats b{display:block;font-family:var(--serif);font-size:22px}.stats span{font-size:12px;color:var(--muted)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+.steps div{border-top:3px solid var(--tan);padding-top:12px;font-size:14px;color:var(--muted)}
+.steps h3{font-size:19px;color:var(--ink);margin-bottom:4px}
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.quote{background:var(--card);border-radius:16px;padding:20px;font-size:14px}
+.quote b{display:block;margin-top:12px;font-family:var(--serif)}.quote small{color:var(--muted)}
+details{background:var(--card);border-radius:12px;padding:14px 18px;margin-bottom:10px;max-width:820px;margin-inline:auto}
+summary{cursor:pointer;font-weight:500}
+details p{margin-top:8px;font-size:14px;color:var(--muted)}
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
+.contact h2{font-size:clamp(30px,4vw,42px);margin-bottom:14px}
+.contact li{list-style:none;margin:12px 0;font-size:15px}
+.contact form{background:var(--card);padding:20px;border-radius:16px;display:grid;gap:12px}
+.tablewrap{overflow-x:auto;background:var(--card);border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+th{background:var(--olive);color:var(--cream);text-align:left;padding:12px 14px;font-weight:500}
+td{padding:12px 14px;border-bottom:1px solid #e6d6ba}
+.st{background:var(--ok);color:var(--olive);border-radius:999px;padding:3px 12px;font-weight:600;font-size:12px}
+.empty{padding:26px;text-align:center;color:var(--muted)}
+footer{background:var(--olive);color:#d9cbb0;padding:34px 0 90px;font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer b{color:var(--tan);font-family:var(--serif);font-size:20px}
+.float{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;gap:10px;z-index:30}
+.float a{background:var(--olive);color:var(--tan);border:1px solid var(--tan);border-radius:999px;padding:10px 18px;font-size:13px;font-weight:500;box-shadow:0 6px 18px #0004}
+dialog{border:0;border-radius:18px;padding:26px;max-width:420px;background:var(--card);color:var(--ink)}
+dialog::backdrop{background:#2f3422aa}
+dialog h3{margin-bottom:8px}dialog p{font-size:14px;margin:4px 0}
+@media(max-width:860px){
+nav{display:none}header .pill{margin-left:auto}
+.hero .wrap,.about,.contact{grid-template-columns:1fr}
+.cards,.steps,.quotes{grid-template-columns:1fr}
+.routes,.svc{grid-template-columns:1fr 1fr}
+.strip{grid-template-columns:1fr 1fr;gap:14px}.strip div+div{border:0}
+.grid{grid-template-columns:1fr}
+}
+@media(max-width:520px){.routes,.svc{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="sedan" viewBox="0 0 240 90"><path d="M12 62c0-8 4-12 14-14l36-8 24-20c3-3 7-4 11-4h46c6 0 11 2 15 6l20 18 34 6c8 2 12 6 12 14v8c0 3-2 5-5 5h-14a22 22 0 0 0-44 0H90a22 22 0 0 0-44 0H17c-3 0-5-2-5-5z" fill="currentColor"/><path d="M98 22h44l16 18H78z" fill="#f4e8d6" opacity=".35"/><circle cx="68" cy="72" r="14" fill="#1d2016"/><circle cx="68" cy="72" r="6" fill="#d9cbb0"/><circle cx="178" cy="72" r="14" fill="#1d2016"/><circle cx="178" cy="72" r="6" fill="#d9cbb0"/></symbol>
+<symbol id="suv" viewBox="0 0 240 90"><path d="M10 64V50c0-6 3-9 9-10l30-6 20-18c3-3 6-4 10-4h92c5 0 9 2 12 5l22 20 24 5c6 1 9 5 9 10v12c0 3-2 5-5 5h-14a22 22 0 0 0-44 0H82a22 22 0 0 0-44 0H15c-3 0-5-2-5-5z" fill="currentColor"/><path d="M88 16h40v22H70zM136 16h30l22 22h-52z" fill="#f4e8d6" opacity=".35"/><circle cx="60" cy="72" r="14" fill="#1d2016"/><circle cx="60" cy="72" r="6" fill="#d9cbb0"/><circle cx="186" cy="72" r="14" fill="#1d2016"/><circle cx="186" cy="72" r="6" fill="#d9cbb0"/></symbol>
+</svg>
+
+<header>
+<div class="wrap">
+<a class="logo" href="#home"><svg width="30" height="22" style="color:var(--tan)"><use href="#sedan"/></svg>YazhGo</a>
+<nav><a href="#home">Home</a><a href="#book">Book</a><a href="#fleet">Fleet</a><a href="#routes">Outstation</a><a href="#about">About</a><a href="#contact">Contact</a></nav>
+<a class="pill" href="#bookings">My Bookings</a>
+</div>
+</header>
+
+<main>
+<section class="hero" id="home">
+<div class="wrap">
+<div>
+<p class="eyebrow">Tamil Nadu’s outstation and drop taxi network</p>
+<h1>Book Your Taxi Anytime, Anywhere.</h1>
+<p>Safe • Comfortable • Affordable<br>One-way drops with no return charges. Round trips from ₹14/km.</p>
+<div class="cta"><a class="btn" href="#book">Book a Ride →</a><a class="btn ghost" href="https://wa.me/919489038346?text=Hi%20YazhGo%20Taxi%2C%20I%20need%20a%20cab%20booking">WhatsApp Booking</a></div>
+</div>
+<svg class="car" viewBox="0 0 480 220" aria-label="Sedan cab" style="color:#15170f"><path d="M0 190h480" stroke="#e2b47c55"/><g fill="#e2b47c33"><rect x="20" y="90" width="22" height="100"/><rect x="50" y="60" width="26" height="130"/><rect x="84" y="100" width="20" height="90"/><rect x="400" y="80" width="24" height="110"/><rect x="432" y="110" width="30" height="80"/></g><g transform="translate(40 22) scale(1.6)"><use href="#sedan" width="240" height="90"/></g></svg>
+</div>
+<div class="wrap"><div class="strip" style="width:100%">
+<div><b>2,400+</b>Verified cabs</div><div><b>4.9 ★</b>50,000+ ratings</div><div><b>₹0</b>Return fare penalty</div><div><b>24/7</b>Helpline +91 94890 38346</div>
+</div></div>
+</section>
+
+<section class="book" id="book">
+<div class="wrap">
+<div class="title"><h2>Book a Taxi</h2><p>Quick. Easy. Convenient. Zero advance payment.</p></div>
+<div class="panel">
+<div class="tabs" id="svcTabs"><button aria-pressed="true" data-v="Outstation">Outstation</button><button aria-pressed="false" data-v="Local City">Local City</button><button aria-pressed="false" data-v="Airport Drop">Airport Drop</button></div>
+<form id="bookForm" class="grid">
+<label>Trip type<select id="mode"><option>One-Way Drop</option><option>Round Trip</option></select></label>
+<label>Vehicle<select id="veh"><option value="sedan">Sedan (Etios, Swift Dzire) ₹15/km</option><option value="suv">SUV (Innova, Ertiga, Xylo, Marazzo) ₹20/km</option><option value="crysta">Innova Crysta ₹24/km</option></select></label>
+<label>Pickup location<input id="from" list="places" placeholder="Chennai Central, Chennai Airport, Koyambedu" required></label>
+<label>Drop location<input id="to" list="places" placeholder="Pondicherry, Bangalore, Coimbatore, Madurai" required></label>
+<datalist id="places"><option>Chennai Central</option><option>Chennai Airport</option><option>Koyambedu</option><option>Pondicherry</option><option>Bangalore</option><option>Coimbatore</option><option>Madurai</option><option>Tirupati</option></datalist>
+<label>Pickup date<input id="date" type="date" required></label>
+<label>Pickup time<input id="time" type="time" required></label>
+<label id="retWrap" class="full" hidden>Return date<input id="ret" type="date"></label>
+<label>Your name<input id="name" required placeholder="Full name"></label>
+<label>Mobile / WhatsApp<input id="phone" type="tel" required placeholder="+91"></label>
+<div class="full"><p class="est" id="est">Billed on actual distance at ₹15/km + ₹400 driver batta.</p>
+<button class="btn" type="submit">Confirm Booking Now →</button></div>
+</form>
+</div>
+</div>
+</section>
+
+<section id="fleet">
+<div class="wrap">
+<div class="title"><small>Official tariffs</small><h2>Our Fleet &amp; Per-KM Rates</h2><p>Transparent rate cards for one-way drops and discounted round trips (250 km minimum per day).</p></div>
+<div class="cards">
+<article class="card"><span class="flag">Most popular</span><svg style="color:#f1efe6"><use href="#sedan"/></svg><h3>Sedan Prime</h3><p class="sub">Etios, Swift Dzire, Honda Amaze</p><p class="rate">One-way <b>₹15</b>/km</p><p class="rate">Round trip <b>₹14</b>/km</p><ul><li>4 passengers, 3 large bags</li><li>Chilled AC, audio system</li><li>Batta ₹400. Toll, permit, waiting and parking extra</li></ul><a class="btn dark pick" data-v="sedan" href="#book">Book Now →</a></article>
+<article class="card"><span class="flag">Family &amp; group</span><svg style="color:#c9ccd0"><use href="#suv"/></svg><h3>Spacious SUV</h3><p class="sub">Innova, Ertiga, Xylo, Marazzo</p><p class="rate">One-way <b>₹20</b>/km</p><p class="rate">Round trip <b>₹19</b>/km</p><ul><li>6–7 passengers, 5 bags</li><li>Dual AC vents, mobile charger</li><li>Batta ₹400. Toll, permit, waiting and parking extra</li></ul><a class="btn dark pick" data-v="suv" href="#book">Book Now →</a></article>
+<article class="card"><span class="flag">VIP executive</span><svg style="color:#23251c"><use href="#suv"/></svg><h3>Innova Crysta</h3><p class="sub">Captain seats, dual-zone AC</p><p class="rate">One-way <b>₹24</b>/km</p><p class="rate">Round trip <b>₹23</b>/km</p><ul><li>7 passengers, 5 large bags</li><li>Captain recliners, VIP chauffeur</li><li>Batta ₹400. Toll, permit, waiting and parking extra</li></ul><a class="btn dark pick" data-v="crysta" href="#book">Book Now →</a></article>
+</div>
+<div class="steps">
+<div><h3>1. Enter ride details</h3>Pick your pickup, drop city, date and vehicle.</div>
+<div><h3>2. Instant dispatch</h3>Driver name and cab number reach you on Telegram and WhatsApp within 15 minutes.</div>
+<div><h3>3. Ride and pay on arrival</h3>Pay at the destination by cash or UPI (GPay, PhonePe).</div>
+</div>
+</div>
+</section>
+
+<section class="outst" id="routes">
+<div class="wrap">
+<div class="title"><small>Outstation trips</small><h2>Explore Beyond Limits</h2><p>Popular one-way routes with fixed fare estimates.</p></div>
+<div class="routes" id="routeGrid"></div>
+<div class="svc">
+<div><h3>Outstation one-way drop</h3>Pay only for the distance you travel. Highway-experienced drivers.</div>
+<div><h3>Round-trip outstation</h3>One cab stays with you all trip. 250 km minimum per day.</div>
+<div><h3>Airport pickup and drop</h3>24/7 transfers, flight tracking, 45 minutes free waiting.</div>
+<div><h3>Corporate and events</h3>Executive cabs for guests and weddings with monthly billing.</div>
+</div>
+</div>
+</section>
+
+<section id="about">
+<div class="wrap">
+<div class="about">
+<div>
+<p class="eyebrow" style="color:var(--muted)">About us</p>
+<h2>YazhGo – More Than Just a Taxi</h2>
+<p>We run a verified network of 2,400+ cabs across Tamil Nadu, Bangalore, Kerala and Andhra Pradesh. Every driver is police verified, every cab is sanitized daily, and every bill is based on the actual odometer and tolls.</p>
+<p>Are you a driver or fleet owner? Attach your Sedan, Ertiga or Innova Crysta for daily assured outstation trips and weekly direct bank payouts.</p>
+<a class="btn dark" href="https://wa.me/919489038346?text=Hi%20YazhGo%2C%20I%20want%20to%20attach%20my%20taxi">Attach Your Taxi →</a>
+<div class="stats"><div><b>2,400+</b><span>Verified cabs</span></div><div><b>4.9/5</b><span>50,000+ ratings</span></div><div><b>₹0</b><span>Hidden charges</span></div></div>
+</div>
+<div class="visual">With you,<br>always.</div>
+</div>
+</div>
+</section>
+
+<section class="outst">
+<div class="wrap">
+<div class="title"><small>Reviews</small><h2>Loved by Thousands of Riders</h2></div>
+<div class="quotes">
+<div class="quote">“Spotless Etios, polite driver and no surge charges. Chennai to Pondicherry at ₹15/km was very smooth.”<b>Rajesh Kumar</b><small>Chennai → Pondicherry, one-way</small></div>
+<div class="quote">“The ₹23/km Innova Crysta round-trip rate was fully transparent on our 3-day Ooty and Coimbatore tour.”<b>Priya Senthil</b><small>Outstation round trip, Innova Crysta</small></div>
+<div class="quote">“The driver arrived 15 minutes early and handled our heavy luggage easily on the airport drop.”<b>Anand Murali</b><small>Airport drop, SUV Ertiga</small></div>
+</div>
+<div class="title" style="margin-top:50px"><h2>Frequently Asked Questions</h2></div>
+<details><summary>What are the per-km rates?</summary><p>Sedan: ₹15 one-way, ₹14 round trip. SUV: ₹20 and ₹19. Innova Crysta: ₹24 and ₹23. Round trips have a 250 km daily minimum.</p></details>
+<details><summary>Are tolls, parking and permits included?</summary><p>Rates include the vehicle, fuel and driver batta. Fastag tolls, parking and interstate permits are paid at actuals with receipts.</p></details>
+<details><summary>How do I pay?</summary><p>UPI (Google Pay, PhonePe, Paytm), cash to the driver, net banking, or cards after your ride.</p></details>
+<details><summary>How soon do I get driver details?</summary><p>Within 15 to 30 minutes of booking, or 2 hours before pickup for advance bookings.</p></details>
+</div>
+</section>
+
+<section id="contact">
+<div class="wrap contact">
+<div>
+<p class="eyebrow" style="color:var(--muted)">Get in touch</p>
+<h2>Contact Us</h2>
+<p>We’re here to help. Reach out any time, day or night.</p>
+<ul><li><b>+91 94890 38346</b><br><small>24/7 helpline</small></li><li><b>bookings@yazhgo.com</b></li><li>142 Anna Salai, Mount Road, Chennai, Tamil Nadu – 600002</li></ul>
+</div>
+<form id="msgForm"><label>Your name<input id="cn" required></label><label>Your message<input id="cm" required></label><button class="btn dark" type="submit">Send via WhatsApp →</button></form>
+</div>
+</section>
+
+<section id="bookings" style="padding-top:0">
+<div class="wrap">
+<div class="title" style="text-align:left"><h2>My Bookings</h2><p>Track the trips you booked on this device.</p></div>
+<div class="tablewrap"><table><thead><tr><th>Booking ID</th><th>Pickup</th><th>Drop</th><th>Date &amp; time</th><th>Vehicle</th><th>Status</th><th>Action</th></tr></thead><tbody id="rows"></tbody></table><p class="empty" id="empty" hidden>No bookings yet. Book your first ride above.</p></div>
+</div>
+</section>
+</main>
+
+<footer><div class="wrap"><div><b>YazhGo</b><br>With you, always.<br>© 2026 YazhGo Taxi Service</div><div>Open 24 hours, 365 days<br>+91 94890 38346 · bookings@yazhgo.com</div></div></footer>
+<div class="float"><a href="https://wa.me/919489038346?text=Hi%20YazhGo%20Taxi%2C%20I%20want%20to%20book%20a%20cab">WhatsApp</a><a href="tel:+919489038346">Call cab</a></div>
+
+<dialog id="dlg"><h3>Booking request received</h3><div id="dlgBody"></div><p style="margin-top:14px"><a class="btn dark" id="dlgWa" target="_blank" rel="noopener">Send to WhatsApp for driver assign →</a></p><p><button class="btn" style="margin-top:8px" onclick="dlg.close()">Close</button></p></dialog>
+
+<script>
+const R=[["Chennai","Pondicherry",150,"3.0",2650,3400],["Chennai","Bangalore",350,"6.0",5650,7400],["Coimbatore","Ooty",90,"2.5",1750,2200],["Chennai","Tirupati",140,"3.5",2500,3200],["Madurai","Rameshwaram",175,"3.5",3025,3900],["Chennai","Vellore",140,"3.0",2500,3200],["Trichy","Thanjavur",60,"1.5",1300,1600],["Chennai","Salem",345,"6.0",5575,7300]];
+const V={sedan:["Sedan",15,14],suv:["SUV",20,19],crysta:["Innova Crysta",24,23]};
+const $=id=>document.getElementById(id),inr=n=>"₹"+n.toLocaleString("en-IN");
+$("routeGrid").innerHTML=R.map((r,i)=>`<div class="route"><h3>${r[0]} → ${r[1]}</h3><small>${r[2]} km · ~${r[3]} hrs</small><p><span>Sedan</span><b>${inr(r[4])}</b></p><p><span>SUV</span><b>${inr(r[5])}</b></p><a class="btn dark" href="#book" data-r="${i}">Book this route</a></div>`).join("");
+document.addEventListener("click",e=>{const a=e.target.closest("[data-r]"),p=e.target.closest(".pick");
+if(a){const r=R[a.dataset.r];$("from").value=r[0];$("to").value=r[1];est()}
+if(p){$("veh").value=p.dataset.v;est()}});
+$("svcTabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+document.querySelectorAll("#svcTabs button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+if(b.dataset.v==="Airport Drop")$("from").placeholder="Chennai Airport";});
+function est(){const v=V[$("veh").value],rt=$("mode").value==="Round Trip";$("retWrap").hidden=!rt;
+const f=$("from").value.toLowerCase(),t=$("to").value.toLowerCase();
+const r=R.find(x=>(f.includes(x[0].toLowerCase())&&t.includes(x[1].toLowerCase()))||(t.includes(x[0].toLowerCase())&&f.includes(x[1].toLowerCase())));
+let m=`${rt?"Round trip":"One-way"} at ${inr(rt?v[2]:v[1])}/km + ₹400 driver batta, billed on actual distance.`;
+if(r&&!rt){const p=$("veh").value==="sedan"?r[4]:$("veh").value==="suv"?r[5]:r[2]*24;m=`Estimated fare for ${r[2]} km: ${inr(p)}. Tolls, parking and permits extra.`}
+if(rt)m+=" 250 km minimum per day.";$("est").textContent=m}
+["mode","veh","from","to"].forEach(i=>$(i).addEventListener("input",est));
+$("date").min=new Date().toISOString().slice(0,10);
+let B=[];try{B=JSON.parse(localStorage.getItem("yzg")||"[]")}catch(e){}
+function draw(){$("empty").hidden=B.length>0;$("rows").innerHTML=B.map(b=>`<tr><td>${b.id}</td><td>${b.from}</td><td>${b.to}</td><td>${b.when}</td><td>${b.veh}</td><td><span class="st">Requested</span></td><td><a class="btn dark" style="padding:5px 12px;font-size:12px" target="_blank" rel="noopener" href="${b.wa}">View details</a></td></tr>`).join("")}
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+$("bookForm").addEventListener("submit",e=>{e.preventDefault();
+const v=V[$("veh").value],id="YZG-"+Math.floor(10000+Math.random()*90000),d=new Date($("date").value+"T"+$("time").value);
+const when=d.toLocaleString("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+const msg=`Hi YazhGo Taxi, booking ${id}\nName: ${$("name").value}\nPhone: ${$("phone").value}\n${$("mode").value}: ${$("from").value} to ${$("to").value}\nDate: ${when}${$("mode").value==="Round Trip"&&$("ret").value?"\nReturn: "+$("ret").value:""}\nVehicle: ${v[0]}`;
+const wa="https://wa.me/919489038346?text="+encodeURIComponent(msg);
+B.unshift({id,from:esc($("from").value),to:esc($("to").value),when,veh:v[0],wa});
+try{localStorage.setItem("yzg",JSON.stringify(B))}catch(x){}
+draw();
+$("dlgBody").innerHTML=`<p>Booking ID: <b>${id}</b></p><p>Route: <b>${esc($("from").value)} → ${esc($("to").value)}</b></p><p>Date and time: <b>${when}</b></p><p>Vehicle: <b>${v[0]}</b> · ${esc($("mode").value)}</p><p>${esc($("est").textContent)}</p>`;
+$("dlgWa").href=wa;dlg.showModal();});
+$("msgForm").addEventListener("submit",e=>{e.preventDefault();
+open("https://wa.me/919489038346?text="+encodeURIComponent(`Hi YazhGo, I’m ${$("cn").value}. ${$("cm").value}`),"_blank")});
+draw();
+</script>
+</body>
+</html>
