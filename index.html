@@ -1,152 +1,1023 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>YazhGo Taxi Service | With You, Always</title>
-<meta name="description" content="One-way drops and round-trip outstation cabs across Tamil Nadu, Bangalore, Kerala and Andhra Pradesh at transparent per-km rates.">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YazhGo Taxi — Book Your Taxi Anytime, Anywhere | Outstation & Drop Taxi</title>
+  <meta name="description" content="Book instant one-way drops and round-trip outstation cabs with YazhGo Taxi. Premium Sedans, SUVs, Luxury Crysta & Tempo Traveller with guaranteed on-time pickup.">
+  <meta name="keywords" content="taxi booking, outstation taxi, one way drop taxi, chennai cab, pondicherry taxi, bangalore drop taxi, innova crysta taxi, yazhgo taxi">
+
+  <!-- Google Fonts: Editorial Luxury Serif + Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-<symbol id="sedan" viewBox="0 0 240 90"><path d="M12 62c0-8 4-12 14-14l36-8 24-20c3-3 7-4 11-4h46c6 0 11 2 15 6l20 18 34 6c8 2 12 6 12 14v8c0 3-2 5-5 5h-14a22 22 0 0 0-44 0H90a22 22 0 0 0-44 0H17c-3 0-5-2-5-5z" fill="currentColor"/><path d="M98 22h44l16 18H78z" fill="#f4e8d6" opacity=".35"/><circle cx="68" cy="72" r="14" fill="#1d2016"/><circle cx="68" cy="72" r="6" fill="#d9cbb0"/><circle cx="178" cy="72" r="14" fill="#1d2016"/><circle cx="178" cy="72" r="6" fill="#d9cbb0"/></symbol>
-<symbol id="suv" viewBox="0 0 240 90"><path d="M10 64V50c0-6 3-9 9-10l30-6 20-18c3-3 6-4 10-4h92c5 0 9 2 12 5l22 20 24 5c6 1 9 5 9 10v12c0 3-2 5-5 5h-14a22 22 0 0 0-44 0H82a22 22 0 0 0-44 0H15c-3 0-5-2-5-5z" fill="currentColor"/><path d="M88 16h40v22H70zM136 16h30l22 22h-52z" fill="#f4e8d6" opacity=".35"/><circle cx="60" cy="72" r="14" fill="#1d2016"/><circle cx="60" cy="72" r="6" fill="#d9cbb0"/><circle cx="186" cy="72" r="14" fill="#1d2016"/><circle cx="186" cy="72" r="6" fill="#d9cbb0"/></symbol>
-</svg>
 
-<header>
-<div class="wrap">
-<a class="logo" href="#home"><svg width="30" height="22" style="color:var(--tan)"><use href="#sedan"/></svg>YazhGo</a>
-<nav><a href="#home">Home</a><a href="#book">Book</a><a href="#fleet">Fleet</a><a href="#routes">Outstation</a><a href="#about">About</a><a href="#contact">Contact</a></nav>
-<a class="pill" href="#bookings">My Bookings</a>
-</div>
-</header>
+  <!-- Top Navigation Header -->
+  <header class="site-header" id="header">
+    <div class="nav-wrapper">
+      
+      <!-- Brand Logo -->
+      <a href="#hero" class="brand-logo" aria-label="YazhGo Taxi Home">
+        <div class="logo-mark">
+          <i data-lucide="car"></i>
+        </div>
+        <div class="brand-title">
+          <span>Yazh<span class="gold-text">Go</span></span>
+        </div>
+      </a>
 
-<main>
-<section class="hero" id="home">
-<div class="wrap">
-<div>
-<p class="eyebrow">Tamil Nadu’s outstation and drop taxi network</p>
-<h1>Book Your Taxi Anytime, Anywhere.</h1>
-<p>Safe • Comfortable • Affordable<br>One-way drops with no return charges. Round trips from ₹14/km.</p>
-<div class="cta"><a class="btn" href="#book">Book a Ride →</a><a class="btn ghost" href="https://wa.me/919489038346?text=Hi%20YazhGo%20Taxi%2C%20I%20need%20a%20cab%20booking">WhatsApp Booking</a></div>
-</div>
-<svg class="car" viewBox="0 0 480 220" aria-label="Sedan cab" style="color:#15170f"><path d="M0 190h480" stroke="#e2b47c55"/><g fill="#e2b47c33"><rect x="20" y="90" width="22" height="100"/><rect x="50" y="60" width="26" height="130"/><rect x="84" y="100" width="20" height="90"/><rect x="400" y="80" width="24" height="110"/><rect x="432" y="110" width="30" height="80"/></g><g transform="translate(40 22) scale(1.6)"><use href="#sedan" width="240" height="90"/></g></svg>
-</div>
-<div class="wrap"><div class="strip" style="width:100%">
-<div><b>2,400+</b>Verified cabs</div><div><b>4.9 ★</b>50,000+ ratings</div><div><b>₹0</b>Return fare penalty</div><div><b>24/7</b>Helpline +91 94890 38346</div>
-</div></div>
-</section>
+      <!-- Desktop Navigation Links -->
+      <nav class="desktop-nav" id="desktopNav">
+        <a href="#hero" class="nav-link active">Home</a>
+        <a href="#book" class="nav-link">Book</a>
+        <a href="#fleet" class="nav-link">Fleet</a>
+        <a href="#outstation" class="nav-link">Outstation</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
 
-<section class="book" id="book">
-<div class="wrap">
-<div class="title"><h2>Book a Taxi</h2><p>Quick. Easy. Convenient. Zero advance payment.</p></div>
-<div class="panel">
-<div class="tabs" id="svcTabs"><button aria-pressed="true" data-v="Outstation">Outstation</button><button aria-pressed="false" data-v="Local City">Local City</button><button aria-pressed="false" data-v="Airport Drop">Airport Drop</button></div>
-<form id="bookForm" class="grid">
-<label>Trip type<select id="mode"><option>One-Way Drop</option><option>Round Trip</option></select></label>
-<label>Vehicle<select id="veh"><option value="sedan">Sedan (Etios, Swift Dzire) ₹15/km</option><option value="suv">SUV (Innova, Ertiga, Xylo, Marazzo) ₹20/km</option><option value="crysta">Innova Crysta ₹24/km</option></select></label>
-<label>Pickup location<input id="from" list="places" placeholder="Chennai Central, Chennai Airport, Koyambedu" required></label>
-<label>Drop location<input id="to" list="places" placeholder="Pondicherry, Bangalore, Coimbatore, Madurai" required></label>
-<datalist id="places"><option>Chennai Central</option><option>Chennai Airport</option><option>Koyambedu</option><option>Pondicherry</option><option>Bangalore</option><option>Coimbatore</option><option>Madurai</option><option>Tirupati</option></datalist>
-<label>Pickup date<input id="date" type="date" required></label>
-<label>Pickup time<input id="time" type="time" required></label>
-<label id="retWrap" class="full" hidden>Return date<input id="ret" type="date"></label>
-<label>Your name<input id="name" required placeholder="Full name"></label>
-<label>Mobile / WhatsApp<input id="phone" type="tel" required placeholder="+91"></label>
-<div class="full"><p class="est" id="est">Billed on actual distance at ₹15/km + ₹400 driver batta.</p>
-<button class="btn" type="submit">Confirm Booking Now →</button></div>
-</form>
-</div>
-</div>
-</section>
+      <!-- Right Action Items -->
+      <div class="nav-actions">
+        <a href="#my-bookings" class="btn-my-bookings" id="navMyBookingsBtn">
+          <i data-lucide="user"></i>
+          <span>My Bookings</span>
+        </a>
+        <button class="btn-attach-taxi" onclick="openDriverModal()">
+          <i data-lucide="user-plus"></i> Attach Taxi
+        </button>
+        <!-- Mobile Menu Toggle Button -->
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu">
+          <i data-lucide="menu" id="menuIcon"></i>
+        </button>
+      </div>
 
-<section id="fleet">
-<div class="wrap">
-<div class="title"><small>Official tariffs</small><h2>Our Fleet &amp; Per-KM Rates</h2><p>Transparent rate cards for one-way drops and discounted round trips (250 km minimum per day).</p></div>
-<div class="cards">
-<article class="card"><span class="flag">Most popular</span><svg style="color:#f1efe6"><use href="#sedan"/></svg><h3>Sedan Prime</h3><p class="sub">Etios, Swift Dzire, Honda Amaze</p><p class="rate">One-way <b>₹15</b>/km</p><p class="rate">Round trip <b>₹14</b>/km</p><ul><li>4 passengers, 3 large bags</li><li>Chilled AC, audio system</li><li>Batta ₹400. Toll, permit, waiting and parking extra</li></ul><a class="btn dark pick" data-v="sedan" href="#book">Book Now →</a></article>
-<article class="card"><span class="flag">Family &amp; group</span><svg style="color:#c9ccd0"><use href="#suv"/></svg><h3>Spacious SUV</h3><p class="sub">Innova, Ertiga, Xylo, Marazzo</p><p class="rate">One-way <b>₹20</b>/km</p><p class="rate">Round trip <b>₹19</b>/km</p><ul><li>6–7 passengers, 5 bags</li><li>Dual AC vents, mobile charger</li><li>Batta ₹400. Toll, permit, waiting and parking extra</li></ul><a class="btn dark pick" data-v="suv" href="#book">Book Now →</a></article>
-<article class="card"><span class="flag">VIP executive</span><svg style="color:#23251c"><use href="#suv"/></svg><h3>Innova Crysta</h3><p class="sub">Captain seats, dual-zone AC</p><p class="rate">One-way <b>₹24</b>/km</p><p class="rate">Round trip <b>₹23</b>/km</p><ul><li>7 passengers, 5 large bags</li><li>Captain recliners, VIP chauffeur</li><li>Batta ₹400. Toll, permit, waiting and parking extra</li></ul><a class="btn dark pick" data-v="crysta" href="#book">Book Now →</a></article>
-</div>
-<div class="steps">
-<div><h3>1. Enter ride details</h3>Pick your pickup, drop city, date and vehicle.</div>
-<div><h3>2. Instant dispatch</h3>Driver name and cab number reach you on Telegram and WhatsApp within 15 minutes.</div>
-<div><h3>3. Ride and pay on arrival</h3>Pay at the destination by cash or UPI (GPay, PhonePe).</div>
-</div>
-</div>
-</section>
+    </div>
 
-<section class="outst" id="routes">
-<div class="wrap">
-<div class="title"><small>Outstation trips</small><h2>Explore Beyond Limits</h2><p>Popular one-way routes with fixed fare estimates.</p></div>
-<div class="routes" id="routeGrid"></div>
-<div class="svc">
-<div><h3>Outstation one-way drop</h3>Pay only for the distance you travel. Highway-experienced drivers.</div>
-<div><h3>Round-trip outstation</h3>One cab stays with you all trip. 250 km minimum per day.</div>
-<div><h3>Airport pickup and drop</h3>24/7 transfers, flight tracking, 45 minutes free waiting.</div>
-<div><h3>Corporate and events</h3>Executive cabs for guests and weddings with monthly billing.</div>
-</div>
-</div>
-</section>
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-drawer" id="mobileDrawer">
+      <div class="drawer-header">
+        <div class="brand-title">
+          <span>Yazh<span class="gold-text">Go</span> Taxi</span>
+        </div>
+        <button class="drawer-close" id="drawerClose" aria-label="Close menu">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <nav class="drawer-links">
+        <a href="#hero" class="drawer-link active" onclick="closeMobileMenu()"><i data-lucide="home"></i> Home</a>
+        <a href="#book" class="drawer-link" onclick="closeMobileMenu()"><i data-lucide="calendar"></i> Book a Taxi</a>
+        <a href="#fleet" class="drawer-link" onclick="closeMobileMenu()"><i data-lucide="car"></i> Choose Your Ride</a>
+        <a href="#outstation" class="drawer-link" onclick="closeMobileMenu()"><i data-lucide="map"></i> Outstation Trips</a>
+        <a href="#about" class="drawer-link" onclick="closeMobileMenu()"><i data-lucide="info"></i> About Us</a>
+        <a href="#contact" class="drawer-link" onclick="closeMobileMenu()"><i data-lucide="mail"></i> Contact Us</a>
+        <a href="#my-bookings" class="drawer-link" onclick="closeMobileMenu()"><i data-lucide="user-check"></i> My Bookings</a>
+      </nav>
+      <div class="drawer-footer">
+        <button class="btn btn-gold btn-block" onclick="closeMobileMenu(); openDriverModal();">
+          <i data-lucide="user-plus"></i> Attach Your Taxi
+        </button>
+        <a href="tel:+919489038346" class="drawer-phone">
+          <i data-lucide="phone-call"></i> 24/7 Helpline: +91 94890 38346
+        </a>
+      </div>
+    </div>
+  </header>
 
-<section id="about">
-<div class="wrap">
-<div class="about">
-<div>
-<p class="eyebrow" style="color:var(--muted)">About us</p>
-<h2>YazhGo – More Than Just a Taxi</h2>
-<p>We run a verified network of 2,400+ cabs across Tamil Nadu, Bangalore, Kerala and Andhra Pradesh. Every driver is police verified, every cab is sanitized daily, and every bill is based on the actual odometer and tolls.</p>
-<p>Are you a driver or fleet owner? Attach your Sedan, Ertiga or Innova Crysta for daily assured outstation trips and weekly direct bank payouts.</p>
-<a class="btn dark" href="https://wa.me/919489038346?text=Hi%20YazhGo%2C%20I%20want%20to%20attach%20my%20taxi">Attach Your Taxi →</a>
-<div class="stats"><div><b>2,400+</b><span>Verified cabs</span></div><div><b>4.9/5</b><span>50,000+ ratings</span></div><div><b>₹0</b><span>Hidden charges</span></div></div>
-</div>
-<div class="visual">With you,<br>always.</div>
-</div>
-</div>
-</section>
+  <main>
+    <!-- =========================================================================
+         SECTION 1: HERO ("YOUR RIDE. OUR PRIORITY.")
+         ========================================================================= -->
+    <section class="hero-section" id="hero">
+      <div class="hero-overlay"></div>
+      <div class="container hero-container">
+        <div class="hero-grid">
+          
+          <!-- Hero Text -->
+          <div class="hero-text-content">
+            <span class="hero-tagline">YOUR RIDE. OUR PRIORITY.</span>
+            <h1 class="hero-headline">
+              Book Your Taxi Anytime, Anywhere
+            </h1>
+            <p class="hero-subhead">
+              Safe &bull; Comfortable &bull; Affordable
+            </p>
+            <div class="hero-cta-group">
+              <a href="#book" class="btn btn-gold-pill">
+                Book a Ride <i data-lucide="arrow-right"></i>
+              </a>
+              <button class="btn btn-video-pill" onclick="openVideoModal()">
+                <span class="play-circle"><i data-lucide="play"></i></span>
+                <span>Watch Video</span>
+              </button>
+            </div>
+          </div>
 
-<section class="outst">
-<div class="wrap">
-<div class="title"><small>Reviews</small><h2>Loved by Thousands of Riders</h2></div>
-<div class="quotes">
-<div class="quote">“Spotless Etios, polite driver and no surge charges. Chennai to Pondicherry at ₹15/km was very smooth.”<b>Rajesh Kumar</b><small>Chennai → Pondicherry, one-way</small></div>
-<div class="quote">“The ₹23/km Innova Crysta round-trip rate was fully transparent on our 3-day Ooty and Coimbatore tour.”<b>Priya Senthil</b><small>Outstation round trip, Innova Crysta</small></div>
-<div class="quote">“The driver arrived 15 minutes early and handled our heavy luggage easily on the airport drop.”<b>Anand Murali</b><small>Airport drop, SUV Ertiga</small></div>
-</div>
-<div class="title" style="margin-top:50px"><h2>Frequently Asked Questions</h2></div>
-<details><summary>What are the per-km rates?</summary><p>Sedan: ₹15 one-way, ₹14 round trip. SUV: ₹20 and ₹19. Innova Crysta: ₹24 and ₹23. Round trips have a 250 km daily minimum.</p></details>
-<details><summary>Are tolls, parking and permits included?</summary><p>Rates include the vehicle, fuel and driver batta. Fastag tolls, parking and interstate permits are paid at actuals with receipts.</p></details>
-<details><summary>How do I pay?</summary><p>UPI (Google Pay, PhonePe, Paytm), cash to the driver, net banking, or cards after your ride.</p></details>
-<details><summary>How soon do I get driver details?</summary><p>Within 15 to 30 minutes of booking, or 2 hours before pickup for advance bookings.</p></details>
-</div>
-</section>
+          <!-- Hero Car Image Graphic -->
+          <div class="hero-image-wrapper">
+            <div class="hero-car-frame">
+              <img src="images/hero-car.jpg" alt="Luxury YazhGo Taxi on City Street" class="hero-car-img" loading="eager">
+              <div class="car-license-badge">YAZHGO</div>
+            </div>
+          </div>
 
-<section id="contact">
-<div class="wrap contact">
-<div>
-<p class="eyebrow" style="color:var(--muted)">Get in touch</p>
-<h2>Contact Us</h2>
-<p>We’re here to help. Reach out any time, day or night.</p>
-<ul><li><b>+91 94890 38346</b><br><small>24/7 helpline</small></li><li><b>bookings@yazhgo.com</b></li><li>142 Anna Salai, Mount Road, Chennai, Tamil Nadu – 600002</li></ul>
-</div>
-<form id="msgForm"><label>Your name<input id="cn" required></label><label>Your message<input id="cm" required></label><button class="btn dark" type="submit">Send via WhatsApp →</button></form>
-</div>
-</section>
+        </div>
+      </div>
 
-<section id="bookings" style="padding-top:0">
-<div class="wrap">
-<div class="title" style="text-align:left"><h2>My Bookings</h2><p>Track the trips you booked on this device.</p></div>
-<div class="tablewrap"><table><thead><tr><th>Booking ID</th><th>Pickup</th><th>Drop</th><th>Date &amp; time</th><th>Vehicle</th><th>Status</th><th>Action</th></tr></thead><tbody id="rows"></tbody></table><p class="empty" id="empty" hidden>No bookings yet. Book your first ride above.</p></div>
-</div>
-</section>
-</main>
+      <!-- Overlapping Floating Trust Bar (Card overlapping transition) -->
+      <div class="trust-bar-container">
+        <div class="container">
+          <div class="trust-bar-card">
+            <div class="trust-item">
+              <div class="trust-icon"><i data-lucide="shield-check"></i></div>
+              <div class="trust-title">Trusted &amp; Safe Rides</div>
+            </div>
+            <div class="trust-item">
+              <div class="trust-icon"><i data-lucide="clock"></i></div>
+              <div class="trust-title">On-Time Service</div>
+            </div>
+            <div class="trust-item">
+              <div class="trust-icon"><i data-lucide="headphones"></i></div>
+              <div class="trust-title">24/7 Customer Support</div>
+            </div>
+            <div class="trust-item">
+              <div class="trust-icon"><i data-lucide="award"></i></div>
+              <div class="trust-title">Best Price Guarantee</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<footer><div class="wrap"><div><b>YazhGo</b><br>With you, always.<br>© 2026 YazhGo Taxi Service</div><div>Open 24 hours, 365 days<br>+91 94890 38346 · bookings@yazhgo.com</div></div></footer>
-<div class="float"><a href="https://wa.me/919489038346?text=Hi%20YazhGo%20Taxi%2C%20I%20want%20to%20book%20a%20cab">WhatsApp</a><a href="tel:+919489038346">Call cab</a></div>
+    <!-- =========================================================================
+         SECTION 2: BOOK A TAXI (Interactive Form + Route Map)
+         ========================================================================= -->
+    <section class="section booking-section" id="book">
+      <div class="container">
+        
+        <div class="section-title-wrap">
+          <h2 class="serif-title">Book a Taxi</h2>
+          <p class="serif-subtitle">Quick. Easy. Convenient.</p>
+        </div>
 
-<dialog id="dlg"><h3>Booking request received</h3><div id="dlgBody"></div><p style="margin-top:14px"><a class="btn dark" id="dlgWa" target="_blank" rel="noopener">Send to WhatsApp for driver assign →</a></p><p><button class="btn" style="margin-top:8px" onclick="dlg.close()">Close</button></p></dialog>
+        <div class="booking-grid">
+          
+          <!-- Booking Card -->
+          <div class="booking-card">
+            
+            <!-- Category Tabs: Local Ride, Outstation, Luxury -->
+            <div class="booking-category-tabs" id="categoryTabs">
+              <button type="button" class="cat-tab" data-cat="local" onclick="switchCategory('local')">
+                <i data-lucide="car"></i> Local Ride
+              </button>
+              <button type="button" class="cat-tab active" data-cat="outstation" onclick="switchCategory('outstation')">
+                <i data-lucide="plane"></i> Outstation
+              </button>
+              <button type="button" class="cat-tab" data-cat="luxury" onclick="switchCategory('luxury')">
+                <i data-lucide="crown"></i> Luxury
+              </button>
+            </div>
 
-<script src="script.js"></script>
+            <!-- Outstation Trip Mode (One-Way vs Round Trip) -->
+            <div class="trip-mode-pill-wrap" id="tripModeWrap">
+              <label class="trip-mode-label">
+                <input type="radio" name="tripMode" value="one-way" checked onchange="updateTripMode()">
+                <span class="mode-pill">One-Way Drop (0 Return Fare)</span>
+              </label>
+              <label class="trip-mode-label">
+                <input type="radio" name="tripMode" value="round-trip" onchange="updateTripMode()">
+                <span class="mode-pill">Round Trip (Min. 250km)</span>
+              </label>
+            </div>
+
+            <form class="booking-form" id="bookingForm" onsubmit="handleBookingSubmit(event)">
+              
+              <!-- Pickup Field -->
+              <div class="form-group">
+                <label for="pickupInput"><i data-lucide="map-pin"></i> Pickup Location</label>
+                <div class="input-with-button">
+                  <input type="text" id="pickupInput" placeholder="Enter pickup location" required autocomplete="off">
+                  <button type="button" class="btn-detect-loc" onclick="detectGPSLocation()" title="Detect current GPS location">
+                    <i data-lucide="crosshair"></i> Detect
+                  </button>
+                </div>
+                <!-- Quick Pickup Tags -->
+                <div class="quick-pill-tags">
+                  <button type="button" class="pill-tag" onclick="setPickup('Chennai Central Station')">Chennai Central</button>
+                  <button type="button" class="pill-tag" onclick="setPickup('Chennai Airport (MAA)')">Airport MAA</button>
+                  <button type="button" class="pill-tag" onclick="setPickup('Koyambedu Bus Terminal')">Koyambedu</button>
+                </div>
+              </div>
+
+              <!-- Drop Field -->
+              <div class="form-group">
+                <label for="dropInput"><i data-lucide="navigation"></i> Drop Location</label>
+                <input type="text" id="dropInput" placeholder="Enter drop location" required autocomplete="off">
+                <!-- Quick Drop Tags -->
+                <div class="quick-pill-tags" id="dropQuickTags">
+                  <button type="button" class="pill-tag" onclick="setDrop('Pondicherry')">Pondicherry</button>
+                  <button type="button" class="pill-tag" onclick="setDrop('Bangalore')">Bangalore</button>
+                  <button type="button" class="pill-tag" onclick="setDrop('Coimbatore')">Coimbatore</button>
+                  <button type="button" class="pill-tag" onclick="setDrop('Madurai')">Madurai</button>
+                  <button type="button" class="pill-tag" onclick="setDrop('Tirupati')">Tirupati</button>
+                </div>
+              </div>
+
+              <!-- Date & Time Row -->
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="pickupDateInput"><i data-lucide="calendar"></i> Date</label>
+                  <input type="date" id="pickupDateInput" required>
+                </div>
+                <div class="form-group">
+                  <label for="pickupTimeInput"><i data-lucide="clock"></i> Time</label>
+                  <input type="time" id="pickupTimeInput" required>
+                </div>
+              </div>
+
+              <!-- Return Date Row (for Round Trip) -->
+              <div class="form-group" id="returnDateWrap" style="display: none;">
+                <label for="returnDateInput"><i data-lucide="calendar-range"></i> Return Date (Round Trip)</label>
+                <input type="date" id="returnDateInput">
+              </div>
+
+              <!-- Passengers & Vehicle Selection -->
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="passengerSelect"><i data-lucide="users"></i> Passengers</label>
+                  <select id="passengerSelect" onchange="onPassengerChange()">
+                    <option value="1">1 Person</option>
+                    <option value="2">2 Persons</option>
+                    <option value="3">3 Persons</option>
+                    <option value="4" selected>4 Persons (Sedan)</option>
+                    <option value="6">6 - 7 Persons (SUV)</option>
+                    <option value="7">7 Persons (Innova Crysta)</option>
+                    <option value="12">8 - 12 Persons (Tempo)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="vehicleSelect"><i data-lucide="car"></i> Vehicle Type</label>
+                  <select id="vehicleSelect" onchange="onVehicleSelectChange()">
+                    <option value="sedan" selected>Sedan (Dzire, Etios) — ₹15/km</option>
+                    <option value="suv">SUV (Ertiga, Innova) — ₹20/km</option>
+                    <option value="crysta">Luxury Innova Crysta — ₹24/km</option>
+                    <option value="tempo">Tempo Traveller — ₹28/km</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Customer Contact Details -->
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="custName"><i data-lucide="user"></i> Your Name</label>
+                  <input type="text" id="custName" placeholder="Full name" required>
+                </div>
+                <div class="form-group">
+                  <label for="custPhone"><i data-lucide="phone"></i> Mobile Phone</label>
+                  <input type="tel" id="custPhone" placeholder="10-digit number" pattern="[0-9]{10}" required>
+                </div>
+              </div>
+
+              <!-- Estimated Fare Preview Banner -->
+              <div class="fare-estimate-badge">
+                <div class="fare-estimate-left">
+                  <span class="fare-type-title" id="fareTypeTitle">Sedan Prime &bull; One-Way Drop</span>
+                  <span class="fare-rate-calc" id="fareRateCalc">₹15/km + ₹400 Batta &bull; Tolls at actuals</span>
+                </div>
+                <div class="fare-estimate-right" id="fareDisplayPrice">₹15 / km</div>
+              </div>
+
+              <!-- Submit Buttons -->
+              <div class="form-submit-row">
+                <button type="submit" class="btn btn-dark-pill btn-block" id="bookingSubmitBtn">
+                  <span>Find Taxi</span> <i data-lucide="arrow-right"></i>
+                </button>
+                <button type="button" class="btn btn-whatsapp-pill btn-block" onclick="bookViaWhatsAppInstant()">
+                  <i data-lucide="message-circle"></i> <span>Instant WhatsApp Booking</span>
+                </button>
+              </div>
+
+            </form>
+          </div>
+
+          <!-- Right Side: Stylized Interactive Route Map -->
+          <div class="route-map-panel">
+            <div class="map-card-inner">
+              <div class="map-header">
+                <div class="map-badge"><i data-lucide="compass"></i> Live Route Planner</div>
+                <h3 class="map-title">South India Route Network</h3>
+                <p class="map-sub">Click any destination to pre-fill your trip route instantly.</p>
+              </div>
+
+              <!-- Stylized Vector Map Canvas -->
+              <div class="map-visual-container">
+                <svg viewBox="0 0 500 450" class="svg-route-map">
+                  <defs>
+                    <linearGradient id="routeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#C5A059" stop-opacity="0.9" />
+                      <stop offset="100%" stop-color="#1B2019" stop-opacity="0.8" />
+                    </linearGradient>
+                    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#1B2019" flood-opacity="0.25" />
+                    </filter>
+                  </defs>
+
+                  <!-- Land Background Tint -->
+                  <path d="M 50,40 Q 250,20 450,50 Q 480,250 430,410 Q 250,440 60,390 Z" fill="#F4EDE4" stroke="#E5DACD" stroke-width="2" />
+                  
+                  <!-- Curved Road Paths -->
+                  <path d="M 380,120 Q 340,190 320,240" class="map-road-line dashed" />
+                  <path d="M 380,120 Q 260,140 180,170" class="map-road-line dashed" />
+                  <path d="M 380,120 Q 260,250 140,290" class="map-road-line dashed" />
+                  <path d="M 380,120 Q 300,280 240,360" class="map-road-line dashed" />
+                  
+                  <!-- Main Hub Pin: Chennai -->
+                  <g class="map-pin-hub" onclick="setPickup('Chennai')">
+                    <circle cx="380" cy="120" r="16" fill="#1B2019" filter="url(#glow)"/>
+                    <circle cx="380" cy="120" r="7" fill="#C5A059" />
+                    <text x="396" y="125" class="map-label hub">Chennai (Hub)</text>
+                  </g>
+
+                  <!-- Destination Pin: Pondicherry -->
+                  <g class="map-pin-dest" onclick="setQuickRoute('Chennai', 'Pondicherry')">
+                    <circle cx="320" cy="240" r="12" fill="#FFFFFF" stroke="#1B2019" stroke-width="3" filter="url(#glow)"/>
+                    <circle cx="320" cy="240" r="5" fill="#C5A059" />
+                    <text x="338" y="244" class="map-label">Pondicherry (150 km)</text>
+                  </g>
+
+                  <!-- Destination Pin: Bangalore -->
+                  <g class="map-pin-dest" onclick="setQuickRoute('Chennai', 'Bangalore')">
+                    <circle cx="180" cy="170" r="12" fill="#FFFFFF" stroke="#1B2019" stroke-width="3" filter="url(#glow)"/>
+                    <circle cx="180" cy="170" r="5" fill="#C5A059" />
+                    <text x="90" y="174" class="map-label">Bangalore (350 km)</text>
+                  </g>
+
+                  <!-- Destination Pin: Coimbatore -->
+                  <g class="map-pin-dest" onclick="setQuickRoute('Chennai', 'Coimbatore')">
+                    <circle cx="140" cy="290" r="12" fill="#FFFFFF" stroke="#1B2019" stroke-width="3" filter="url(#glow)"/>
+                    <circle cx="140" cy="290" r="5" fill="#C5A059" />
+                    <text x="50" y="294" class="map-label">Coimbatore (510 km)</text>
+                  </g>
+
+                  <!-- Destination Pin: Madurai -->
+                  <g class="map-pin-dest" onclick="setQuickRoute('Chennai', 'Madurai')">
+                    <circle cx="240" cy="360" r="12" fill="#FFFFFF" stroke="#1B2019" stroke-width="3" filter="url(#glow)"/>
+                    <circle cx="240" cy="360" r="5" fill="#C5A059" />
+                    <text x="258" y="364" class="map-label">Madurai (460 km)</text>
+                  </g>
+                </svg>
+              </div>
+
+              <!-- Quick Route Selector Strip -->
+              <div class="popular-route-strip">
+                <span class="strip-label">Frequently Booked:</span>
+                <button type="button" class="route-pill-btn" onclick="setQuickRoute('Chennai', 'Pondicherry')">
+                  Chennai &rarr; Pondicherry (₹2,650)
+                </button>
+                <button type="button" class="route-pill-btn" onclick="setQuickRoute('Chennai', 'Bangalore')">
+                  Chennai &rarr; Bangalore (₹5,650)
+                </button>
+                <button type="button" class="route-pill-btn" onclick="setQuickRoute('Coimbatore', 'Ooty')">
+                  Coimbatore &rarr; Ooty (₹1,750)
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 3: OUR FLEET ("CHOOSE YOUR RIDE")
+         ========================================================================= -->
+    <section class="section fleet-section" id="fleet">
+      <div class="container">
+        
+        <div class="section-title-wrap">
+          <span class="section-tag-gold">OUR FLEET</span>
+          <h2 class="serif-title">Choose Your Ride</h2>
+          <p class="serif-subtitle">From economy to luxury, we have the perfect car for you.</p>
+        </div>
+
+        <!-- 4-Card Fleet Grid -->
+        <div class="fleet-grid-4">
+          
+          <!-- Card 1: Sedan -->
+          <div class="fleet-item-card">
+            <div class="fleet-card-img-wrap">
+              <img src="images/swift.png" alt="Sedan Taxi Dzire Etios" class="fleet-car-img" loading="lazy">
+            </div>
+            <div class="fleet-card-body">
+              <h3 class="fleet-car-name">Sedan</h3>
+              <p class="fleet-car-desc">Comfort for Everyday Travel</p>
+              <div class="fleet-card-price">
+                From <strong>₹15/km</strong>
+              </div>
+              <div class="fleet-card-extra">
+                <div class="extra-batta">Batta: ₹400</div>
+                <div class="extra-terms">Toll, Permit, Waiting &amp; Parking Extra</div>
+              </div>
+              <button class="btn btn-dark-pill btn-block" onclick="selectFleetAndScroll('sedan')">
+                Book Now &rarr;
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 2: SUV -->
+          <div class="fleet-item-card">
+            <div class="fleet-card-img-wrap">
+              <img src="images/ertiga.png" alt="SUV Taxi Innova Ertiga" class="fleet-car-img" loading="lazy">
+            </div>
+            <div class="fleet-card-body">
+              <h3 class="fleet-car-name">SUV</h3>
+              <p class="fleet-car-desc">More Space, More Comfort</p>
+              <div class="fleet-card-price">
+                From <strong>₹20/km</strong>
+              </div>
+              <div class="fleet-card-extra">
+                <div class="extra-batta">Batta: ₹400</div>
+                <div class="extra-terms">Toll, Permit, Waiting &amp; Parking Extra</div>
+              </div>
+              <button class="btn btn-dark-pill btn-block" onclick="selectFleetAndScroll('suv')">
+                Book Now &rarr;
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 3: Luxury -->
+          <div class="fleet-item-card featured-luxury">
+            <div class="fleet-badge-pill">VIP Executive</div>
+            <div class="fleet-card-img-wrap">
+              <img src="images/crysta.webp" alt="Luxury Innova Crysta Taxi" class="fleet-car-img" loading="lazy">
+            </div>
+            <div class="fleet-card-body">
+              <h3 class="fleet-car-name">Luxury</h3>
+              <p class="fleet-car-desc">Travel in Style</p>
+              <div class="fleet-card-price">
+                From <strong>₹24/km</strong>
+              </div>
+              <div class="fleet-card-extra">
+                <div class="extra-batta">Batta: ₹400</div>
+                <div class="extra-terms">Toll, Permit, Waiting &amp; Parking Extra</div>
+              </div>
+              <button class="btn btn-dark-pill btn-block" onclick="selectFleetAndScroll('crysta')">
+                Book Now &rarr;
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 4: Tempo -->
+          <div class="fleet-item-card">
+            <div class="fleet-card-img-wrap">
+              <img src="images/tempo.jpg" alt="Tempo Traveller Van Taxi" class="fleet-car-img" loading="lazy">
+            </div>
+            <div class="fleet-card-body">
+              <h3 class="fleet-car-name">Tempo</h3>
+              <p class="fleet-car-desc">Group Travel Made Easy</p>
+              <div class="fleet-card-price">
+                From <strong>₹28/km</strong>
+              </div>
+              <div class="fleet-card-extra">
+                <div class="extra-batta">Batta: ₹600</div>
+                <div class="extra-terms">Toll, Permit, Waiting &amp; Parking Extra</div>
+              </div>
+              <button class="btn btn-dark-pill btn-block" onclick="selectFleetAndScroll('tempo')">
+                Book Now &rarr;
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 4: OUTSTATION TRIPS ("EXPLORE BEYOND LIMITS")
+         ========================================================================= -->
+    <section class="section outstation-section" id="outstation">
+      <div class="container">
+        <div class="outstation-card-container">
+          
+          <!-- Left Scenic Driving Photo Banner -->
+          <div class="outstation-photo-banner">
+            <img src="images/outstation-road.jpg" alt="Scenic Highway Outstation Road Trip" class="outstation-bg-img" loading="lazy">
+            <div class="outstation-photo-overlay">
+              <button class="btn btn-dark-pill" onclick="scrollToBookingOutstation()">
+                Plan Your Trip &rarr;
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Content & Feature List -->
+          <div class="outstation-content-pane">
+            <span class="section-tag-gold">OUTSTATION TRIPS</span>
+            <h2 class="serif-title">Explore Beyond Limits</h2>
+            <p class="serif-subtitle">Plan your outstation journey with ease and comfort.</p>
+
+            <div class="outstation-features-grid">
+              
+              <div class="feature-capsule">
+                <div class="capsule-icon"><i data-lucide="repeat"></i></div>
+                <div class="capsule-text">
+                  <strong>One-Way &amp; Round Trip</strong>
+                  <small>No return charges for one-way drops</small>
+                </div>
+              </div>
+
+              <div class="feature-capsule">
+                <div class="capsule-icon"><i data-lucide="badge-percent"></i></div>
+                <div class="capsule-text">
+                  <strong>Affordable Packages</strong>
+                  <small>Transparent per-km rate guarantee</small>
+                </div>
+              </div>
+
+              <div class="feature-capsule">
+                <div class="capsule-icon"><i data-lucide="clock"></i></div>
+                <div class="capsule-text">
+                  <strong>Flexible Scheduling</strong>
+                  <small>24/7 doorstep pickup anytime</small>
+                </div>
+              </div>
+
+              <div class="feature-capsule">
+                <div class="capsule-icon"><i data-lucide="shield-check"></i></div>
+                <div class="capsule-text">
+                  <strong>Safe &amp; Reliable</strong>
+                  <small>Police-verified courteous chauffeurs</small>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 5: ABOUT US ("YAZHGO — MORE THAN JUST A TAXI")
+         ========================================================================= -->
+    <section class="section about-section" id="about">
+      <div class="container">
+        <div class="about-grid">
+          
+          <!-- Left Text & Stat Counters -->
+          <div class="about-left-pane">
+            <span class="section-tag-gold">ABOUT US</span>
+            <h2 class="serif-title">YazhGo &ndash; More Than Just a Taxi</h2>
+            <p class="about-body-text">
+              We are committed to providing safe, reliable, and comfortable travel solutions for every journey. With a passion for better mobility, we aim to make your travel experience smooth and stress-free across Tamil Nadu, Bangalore, Kerala, and Andhra Pradesh.
+            </p>
+            <div class="about-btn-wrap">
+              <button class="btn btn-dark-pill" onclick="openAboutModal()">
+                Know More &rarr;
+              </button>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="about-stats-row">
+              <div class="stat-item">
+                <div class="stat-icon"><i data-lucide="users"></i></div>
+                <div class="stat-info">
+                  <div class="stat-num">10M+</div>
+                  <div class="stat-label">Happy Riders</div>
+                </div>
+              </div>
+
+              <div class="stat-item">
+                <div class="stat-icon"><i data-lucide="star"></i></div>
+                <div class="stat-info">
+                  <div class="stat-num">4.8/5</div>
+                  <div class="stat-label">Customer Rating</div>
+                </div>
+              </div>
+
+              <div class="stat-item">
+                <div class="stat-icon"><i data-lucide="map-pin"></i></div>
+                <div class="stat-info">
+                  <div class="stat-num">100+</div>
+                  <div class="stat-label">Cities Coverage</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Arched Highway Image -->
+          <div class="about-right-pane">
+            <div class="arched-window-wrapper">
+              <img src="images/sunset-drive.jpg" alt="Ride Better, Live Better Sunset Drive" class="arched-img" loading="lazy">
+              <div class="cursive-badge">
+                <span>Ride Better, Live Better</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 6: CONTACT US ("GET IN TOUCH")
+         ========================================================================= -->
+    <section class="section contact-section" id="contact">
+      <div class="container">
+        
+        <div class="contact-card-wrapper">
+          <div class="contact-grid">
+            
+            <!-- Left Contact Information -->
+            <div class="contact-left-info">
+              <span class="section-tag-gold">GET IN TOUCH</span>
+              <h2 class="serif-title">Contact Us</h2>
+              <p class="serif-subtitle">We're here to help! Reach out to us anytime.</p>
+
+              <div class="contact-details-list">
+                
+                <a href="tel:+919489038346" class="contact-entry">
+                  <div class="contact-icon-circle"><i data-lucide="phone"></i></div>
+                  <div class="contact-text">
+                    <strong>+91 94890 38346</strong>
+                    <small>24/7 Support Hotline</small>
+                  </div>
+                </a>
+
+                <a href="mailto:support@yazhgo.com" class="contact-entry">
+                  <div class="contact-icon-circle"><i data-lucide="mail"></i></div>
+                  <div class="contact-text">
+                    <strong>support@yazhgo.com</strong>
+                    <small>Customer &amp; Booking Enquiries</small>
+                  </div>
+                </a>
+
+                <div class="contact-entry">
+                  <div class="contact-icon-circle"><i data-lucide="map-pin"></i></div>
+                  <div class="contact-text">
+                    <strong>142 Anna Salai, Mount Road</strong>
+                    <small>Chennai, Tamil Nadu - 600002</small>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- City Skyline Silhouette Line Art Graphic -->
+              <div class="skyline-art-container">
+                <svg viewBox="0 0 400 60" class="skyline-svg">
+                  <path d="M0,58 L30,58 L30,35 L45,35 L45,45 L60,45 L60,25 L75,25 L75,10 L85,5 L95,10 L95,40 L115,40 L115,30 L130,30 L130,58 L160,58 L160,20 L180,20 L180,45 L200,45 L200,15 L215,8 L230,15 L230,50 L260,50 L260,30 L275,30 L275,58 L310,58 L310,22 L330,22 L330,48 L350,48 L350,18 L370,18 L370,58 L400,58" fill="none" stroke="#C5A059" stroke-width="2" opacity="0.65" />
+                </svg>
+              </div>
+
+            </div>
+
+            <!-- Right Contact Message Form -->
+            <div class="contact-right-form">
+              <form class="contact-box-form" onsubmit="handleContactSubmit(event)">
+                <div class="form-group">
+                  <label for="contactName">Your Name</label>
+                  <input type="text" id="contactName" placeholder="Full name" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="contactEmail">Your Email / Phone</label>
+                  <input type="text" id="contactEmail" placeholder="Email or 10-digit mobile" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="contactMessage">Your Message</label>
+                  <textarea id="contactMessage" rows="4" placeholder="How can our dispatch team assist you today?" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-dark-pill btn-block" id="contactSubmitBtn">
+                  <span>Send Message</span> <i data-lucide="arrow-right"></i>
+                </button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 7: MY BOOKINGS CUSTOMER PORTAL (Bottom Strip View)
+         ========================================================================= -->
+    <section class="section my-bookings-section" id="my-bookings">
+      <div class="container">
+        
+        <div class="portal-card-wrapper">
+          
+          <!-- Portal Header Bar -->
+          <div class="portal-header-bar">
+            <div class="portal-brand">
+              <i data-lucide="car"></i>
+              <span>YazhGo Customer Portal</span>
+            </div>
+            <div class="portal-lookup-wrap">
+              <input type="tel" id="bookingLookupPhone" placeholder="Enter Mobile to find bookings" maxlength="10">
+              <button type="button" class="btn btn-gold-sm" onclick="lookupMyBookings()">
+                <i data-lucide="search"></i> Track
+              </button>
+            </div>
+          </div>
+
+          <div class="portal-body-grid">
+            
+            <!-- Left User Profile Sidebar -->
+            <div class="portal-user-sidebar">
+              <div class="user-profile-badge">
+                <div class="user-avatar-circle" id="userAvatar">K</div>
+                <div class="user-profile-meta">
+                  <strong class="user-name-display" id="userNameDisplay">Customer Account</strong>
+                  <span class="user-email-display" id="userEmailDisplay">Active Passenger</span>
+                </div>
+              </div>
+
+              <div class="portal-menu-list">
+                <button type="button" class="portal-menu-item active" onclick="switchPortalTab('bookings')">
+                  <i data-lucide="calendar"></i> My Bookings
+                </button>
+                <button type="button" class="portal-menu-item" onclick="switchPortalTab('profile')">
+                  <i data-lucide="user"></i> Passenger Profile
+                </button>
+                <button type="button" class="portal-menu-item" onclick="clearMyBookingsSession()">
+                  <i data-lucide="log-out"></i> Reset View
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Bookings Management Table -->
+            <div class="portal-main-pane">
+              <div class="pane-title-wrap">
+                <h3 class="pane-heading">My Bookings</h3>
+                <p class="pane-sub">Track your trips and manage your taxi bookings.</p>
+              </div>
+
+              <div class="table-responsive">
+                <table class="bookings-portal-table" id="portalTable">
+                  <thead>
+                    <tr>
+                      <th>Booking ID</th>
+                      <th>Pickup</th>
+                      <th>Drop</th>
+                      <th>Date &amp; Time</th>
+                      <th>Vehicle</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="portalTableBody">
+                    <!-- Populated dynamically via script.js -->
+                    <tr>
+                      <td><span class="booking-id-tag">YZG-202611</span></td>
+                      <td>Tambaram</td>
+                      <td>Chennai Central</td>
+                      <td>Today &bull; 10:30 AM</td>
+                      <td>Sedan Prime</td>
+                      <td><span class="status-pill ongoing">On Going</span></td>
+                      <td>
+                        <button class="btn-table-action" onclick="viewBookingDetailsModal('YZG-202611')">
+                          View Details &rarr;
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="portal-empty-state" id="portalEmptyState" style="display: none;">
+                <i data-lucide="calendar-x"></i>
+                <p>No active bookings found. Book a ride above to view your scheduled journeys here.</p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+  <footer class="site-footer">
+    <div class="container footer-container">
+      
+      <div class="footer-grid">
+        
+        <!-- Brand Info -->
+        <div class="footer-col brand-col">
+          <div class="footer-logo">
+            <div class="logo-mark"><i data-lucide="car"></i></div>
+            <span class="brand-title">Yazh<span class="gold-text">Go</span> Taxi</span>
+          </div>
+          <p class="footer-desc">
+            Your trusted chauffeur and drop taxi network across South India. Guaranteed transparent per-km billing, sanitized AC vehicles, and 24/7 dedicated customer care.
+          </p>
+          <div class="footer-social-row">
+            <a href="#" aria-label="Facebook"><i data-lucide="facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i data-lucide="instagram"></i></a>
+            <a href="#" aria-label="Twitter"><i data-lucide="twitter"></i></a>
+            <a href="https://wa.me/919489038346" aria-label="WhatsApp"><i data-lucide="message-circle"></i></a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-col">
+          <h4 class="footer-col-title">Quick Links</h4>
+          <ul class="footer-nav-list">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#book">Book a Taxi</a></li>
+            <li><a href="#fleet">Our Fleet</a></li>
+            <li><a href="#outstation">Outstation Trips</a></li>
+            <li><a href="#my-bookings">Track Booking</a></li>
+            <li><a href="javascript:void(0)" onclick="openDriverModal()">Attach Taxi Partner</a></li>
+          </ul>
+        </div>
+
+        <!-- Popular Routes -->
+        <div class="footer-col">
+          <h4 class="footer-col-title">Popular Routes</h4>
+          <ul class="footer-nav-list">
+            <li><a href="#book" onclick="setQuickRoute('Chennai', 'Pondicherry')">Chennai &rarr; Pondicherry</a></li>
+            <li><a href="#book" onclick="setQuickRoute('Chennai', 'Bangalore')">Chennai &rarr; Bangalore</a></li>
+            <li><a href="#book" onclick="setQuickRoute('Coimbatore', 'Ooty')">Coimbatore &rarr; Ooty</a></li>
+            <li><a href="#book" onclick="setQuickRoute('Madurai', 'Rameshwaram')">Madurai &rarr; Rameshwaram</a></li>
+            <li><a href="#book" onclick="setQuickRoute('Chennai', 'Vellore')">Chennai &rarr; Vellore</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Support -->
+        <div class="footer-col">
+          <h4 class="footer-col-title">Contact &amp; 24/7 Support</h4>
+          <div class="footer-contact-items">
+            <p><i data-lucide="phone"></i> +91 94890 38346</p>
+            <p><i data-lucide="mail"></i> bookings@yazhgo.com</p>
+            <p><i data-lucide="map-pin"></i> 142 Anna Salai, Chennai 600002</p>
+            <p><i data-lucide="clock"></i> 24 Hours &bull; 7 Days &bull; 365 Days</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom-bar">
+        <p>&copy; 2026 YazhGo Taxi Service. All rights reserved.</p>
+        <div class="footer-legal-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Tariff Policy</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Floating Mobile Quick Action Buttons -->
+  <div class="mobile-floating-bar">
+    <a href="https://wa.me/919489038346?text=Hi%20YazhGo%20Taxi,%20I%20want%20to%20book%20a%20cab" target="_blank" class="float-btn float-wa" aria-label="Book on WhatsApp">
+      <i data-lucide="message-circle"></i>
+      <span>WhatsApp</span>
+    </a>
+    <a href="tel:+919489038346" class="float-btn float-call" aria-label="Call Taxi Helpline">
+      <i data-lucide="phone-call"></i>
+      <span>Call Cab</span>
+    </a>
+  </div>
+
+  <!-- =========================================================================
+       MODALS
+       ========================================================================= -->
+
+  <!-- 1. Booking Success Confirmation Modal -->
+  <div class="modal-backdrop" id="bookingSuccessModal" style="display: none;">
+    <div class="modal-sheet">
+      <button class="modal-close-btn" onclick="closeModal('bookingSuccessModal')">&times;</button>
+      
+      <div class="modal-success-icon-wrap">
+        <i data-lucide="check-circle-2"></i>
+      </div>
+
+      <h3 class="modal-heading">Ride Booking Received!</h3>
+      <p class="modal-description">
+        Thank you, <strong id="modalCustomerName">Customer</strong>! Your journey has been reserved and dispatched to our fleet operations desk.
+      </p>
+
+      <div class="modal-ticket-receipt">
+        <div class="ticket-row">
+          <span>Booking ID:</span>
+          <strong id="modalTicketId">YZG-78210</strong>
+        </div>
+        <div class="ticket-row">
+          <span>Route:</span>
+          <strong id="modalTicketRoute">Chennai &rarr; Pondicherry</strong>
+        </div>
+        <div class="ticket-row">
+          <span>Date &amp; Time:</span>
+          <strong id="modalTicketDateTime">Today &bull; 10:30 AM</strong>
+        </div>
+        <div class="ticket-row">
+          <span>Vehicle:</span>
+          <strong id="modalTicketVehicle">Sedan Prime (4 Seater)</strong>
+        </div>
+        <div class="ticket-row">
+          <span>Mode:</span>
+          <strong id="modalTicketMode">One-Way Drop</strong>
+        </div>
+        <div class="ticket-row highlight-fare-row">
+          <span>Tariff Estimate:</span>
+          <strong id="modalTicketFare">₹15 / km (Actuals)</strong>
+        </div>
+      </div>
+
+      <div class="modal-actions-col">
+        <a id="modalWhatsAppDispatchLink" href="#" target="_blank" class="btn btn-whatsapp-pill btn-block">
+          <i data-lucide="message-circle"></i> Send to WhatsApp for Instant Driver Allocation
+        </a>
+        <button class="btn btn-dark-pill btn-block" onclick="window.print()">
+          <i data-lucide="printer"></i> Print / Save Receipt
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Driver Partner Registration Modal -->
+  <div class="modal-backdrop" id="driverPartnerModal" style="display: none;">
+    <div class="modal-sheet">
+      <button class="modal-close-btn" onclick="closeModal('driverPartnerModal')">&times;</button>
+      
+      <div class="modal-tag-gold"><i data-lucide="user-plus"></i> Partner Onboarding</div>
+      <h3 class="modal-heading">Attach Your Taxi to YazhGo</h3>
+      <p class="modal-description">
+        Join 2,400+ vehicle owners earning guaranteed income with daily outstation trips and lowest commission deductions.
+      </p>
+
+      <form class="driver-onboard-form" onsubmit="handleDriverSubmit(event)">
+        <div class="form-group">
+          <label for="driverName">Driver / Vehicle Owner Name</label>
+          <input type="text" id="driverName" placeholder="Full name as in Driving License" required>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="driverPhone">Mobile Number</label>
+            <input type="tel" id="driverPhone" placeholder="10-digit mobile" pattern="[0-9]{10}" required>
+          </div>
+          <div class="form-group">
+            <label for="driverCity">Operating City</label>
+            <input type="text" id="driverCity" placeholder="e.g. Chennai, Madurai" required>
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="driverCarModel">Vehicle Model</label>
+            <input type="text" id="driverCarModel" placeholder="e.g. Etios, Ertiga, Crysta" required>
+          </div>
+          <div class="form-group">
+            <label for="driverCarNumber">Vehicle Number</label>
+            <input type="text" id="driverCarNumber" placeholder="e.g. TN 01 AB 1234" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-gold-pill btn-block" id="driverSubmitBtn">
+          <span>Submit Partner Application</span> &rarr;
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. Video Showcase Modal -->
+  <div class="modal-backdrop" id="videoModal" style="display: none;">
+    <div class="modal-sheet video-modal-sheet">
+      <button class="modal-close-btn" onclick="closeModal('videoModal')">&times;</button>
+      <h3 class="modal-heading">Experience the YazhGo Difference</h3>
+      <p class="modal-description">Watch how we ensure safe, sanitized, and punctual outstation taxi rides.</p>
+      <div class="video-preview-box">
+        <img src="images/sunset-drive.jpg" alt="Video Demonstration Preview" class="video-mock-img">
+        <div class="video-play-overlay" onclick="showToast('Video preview loaded — live streaming coming soon!', 'info')">
+          <i data-lucide="play-circle"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-stack-container"></div>
+
+  <!-- Main JavaScript File -->
+  <script src="script.js"></script>
 </body>
 </html>

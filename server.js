@@ -36,12 +36,19 @@ const VEHICLE_RATES = {
     oneWayRate: 20,
     roundTripRate: 19,
     minKmRoundTrip: 250,
-    driverBeta: 500
+    driverBeta: 400
   },
   crysta: {
     name: 'Innova Crysta (Premium)',
     oneWayRate: 24,
     roundTripRate: 23,
+    minKmRoundTrip: 250,
+    driverBeta: 400
+  },
+  tempo: {
+    name: 'Tempo Traveller (12-16 Seater)',
+    oneWayRate: 28,
+    roundTripRate: 27,
     minKmRoundTrip: 250,
     driverBeta: 600
   },
@@ -58,12 +65,19 @@ const VEHICLE_RATES = {
     oneWayRate: 20,
     roundTripRate: 19,
     minKmRoundTrip: 250,
-    driverBeta: 500
+    driverBeta: 400
   },
   Premium: {
     name: 'Innova Crysta (Premium)',
     oneWayRate: 24,
     roundTripRate: 23,
+    minKmRoundTrip: 250,
+    driverBeta: 400
+  },
+  Tempo: {
+    name: 'Tempo Traveller (12-16 Seater)',
+    oneWayRate: 28,
+    roundTripRate: 27,
     minKmRoundTrip: 250,
     driverBeta: 600
   }
